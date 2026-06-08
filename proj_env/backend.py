@@ -13,6 +13,19 @@ import io
 import PyPDF2
 from datetime import datetime, date
 import os
+from advanced_features import (
+    analyze_burnout_comprehensive,
+    generate_intelligent_dpp,
+    calculate_review_schedule,
+    get_topics_due_for_review,
+    calibrate_adaptive_difficulty,
+    build_topic_dependency_graph,
+    detect_learning_style,
+    generate_adaptive_content,
+    generate_exam_simulation,
+    evaluate_exam_performance,
+    generate_progress_charts
+)
 
 app = FastAPI(title="Student Manager Backend")
 
@@ -673,6 +686,267 @@ async def update_profile(profile: dict, username: str = Depends(get_current_user
         save_db(DB)
         return {"status": "success", "profile": profile}
     raise HTTPException(status_code=404, detail="Account not found")
+
+
+# ============================================================================
+# NEW ENDPOINTS: ADVANCED FEATURES (Implemented)
+# ============================================================================
+
+@app.post("/api/features/burnout-analysis")
+async def analyze_burnout(user_data: dict, username: str = Depends(get_current_user)):
+    """FEATURE 1: Comprehensive burnout analysis using 6+ metrics."""
+    analysis = analyze_burnout_comprehensive(user_data)
+    
+    if not DB.get("burnout_reports"):
+        DB["burnout_reports"] = {}
+    DB["burnout_reports"][username] = {
+        "timestamp": datetime.now().isoformat(),
+        "analysis": analysis
+    }
+    save_db(DB)
+    
+    return {"status": "success", "burnout_analysis": analysis}
+
+
+@app.post("/api/features/intelligent-dpp")
+async def generate_intelligent_questions(
+    topics: List[str],
+    user_performance: Dict[str, float] = None,
+    difficulty: int = 2,
+    username: str = Depends(get_current_user)
+):
+    """FEATURE 2: Intelligent, contextual DPP question generation."""
+    if user_performance is None:
+        user_performance = {topic: 0.5 for topic in topics}
+    
+    questions = generate_intelligent_dpp(topics, user_performance, difficulty)
+    
+    if not DB.get("dpp_history"):
+        DB["dpp_history"] = {}
+    DB["dpp_history"][username] = {
+        "timestamp": datetime.now().isoformat(),
+        "questions": questions
+    }
+    save_db(DB)
+    
+    return {"status": "success", "questions": questions}
+
+
+@app.get("/api/features/srs-review-schedule")
+async def get_srs_schedule(
+    topic: str,
+    mastery_level: float = 0.5,
+    username: str = Depends(get_current_user)
+):
+    """FEATURE 3: Get optimal review schedule using spaced repetition."""
+    schedule = calculate_review_schedule(topic, mastery_level)
+    return {"status": "success", "schedule": schedule}
+
+
+@app.get("/api/features/topics-due-review")
+async def get_due_topics(username: str = Depends(get_current_user)):
+    """FEATURE 3: Get all topics due for review based on SRS algorithm."""
+    user_topics = DB.get("user_topics", {}).get(username, {})
+    due_topics = get_topics_due_for_review(user_topics)
+    
+    return {
+        "status": "success",
+        "due_count": len(due_topics),
+        "topics": due_topics
+    }
+
+
+@app.post("/api/features/calibrate-difficulty")
+async def calibrate_difficulty(
+    problem_history: List[Dict] = None,
+    username: str = Depends(get_current_user)
+):
+    """FEATURE 4: Calibrate next problem difficulty based on performance."""
+    if problem_history is None:
+        problem_history = DB.get("problem_history", {}).get(username, [])
+    
+    calibration = calibrate_adaptive_difficulty(problem_history)
+    return {"status": "success", "calibration": calibration}
+
+
+@app.post("/api/features/topic-dependencies")
+async def get_topic_graph(
+    topics: List[str],
+    username: str = Depends(get_current_user)
+):
+    """FEATURE 5: Build and retrieve topic dependency graph."""
+    graph = build_topic_dependency_graph(topics)
+    
+    if not DB.get("topic_graphs"):
+        DB["topic_graphs"] = {}
+    DB["topic_graphs"][username] = graph
+    save_db(DB)
+    
+    return {"status": "success", "graph": graph}
+
+
+@app.post("/api/features/detect-learning-style")
+async def detect_style(
+    interaction_history: List[Dict] = None,
+    username: str = Depends(get_current_user)
+):
+    """FEATURE 6: Detect student's learning style from interaction patterns."""
+    if interaction_history is None:
+        interaction_history = DB.get("interactions", {}).get(username, [])
+    
+    style = detect_learning_style(interaction_history)
+    
+    if not DB.get("learning_styles"):
+        DB["learning_styles"] = {}
+    DB["learning_styles"][username] = style
+    save_db(DB)
+    
+    return {"status": "success", "learning_style": style}
+
+
+@app.post("/api/features/adaptive-content")
+async def get_adaptive_content(
+    topic: str,
+    difficulty: int = 2,
+    username: str = Depends(get_current_user)
+):
+    """FEATURE 6: Generate content in student's preferred learning style."""
+    style_data = DB.get("learning_styles", {}).get(username, {})
+    learning_style = style_data.get("primary_style", "reading")
+    
+    content = generate_adaptive_content(topic, learning_style, difficulty)
+    return {"status": "success", "content": content}
+
+
+@app.post("/api/features/exam-simulation/create")
+async def create_exam(
+    topics: List[str],
+    duration_minutes: int = 120,
+    num_questions: int = 50,
+    username: str = Depends(get_current_user)
+):
+    """FEATURE 7: Create a realistic exam simulation."""
+    exam = generate_exam_simulation(topics, duration_minutes, num_questions)
+    
+    if not DB.get("exams"):
+        DB["exams"] = {}
+    if username not in DB["exams"]:
+        DB["exams"][username] = []
+    
+    DB["exams"][username].append(exam)
+    save_db(DB)
+    
+    return {"status": "success", "exam": exam}
+
+
+@app.post("/api/features/exam-simulation/submit")
+async def submit_exam(
+    exam_id: str,
+    answers: List[Dict],
+    time_taken_per_q: List[int],
+    username: str = Depends(get_current_user)
+):
+    """FEATURE 7: Submit exam answers and get performance analysis."""
+    exams = DB.get("exams", {}).get(username, [])
+    exam = next((e for e in exams if e["exam_id"] == exam_id), None)
+    
+    if not exam:
+        raise HTTPException(status_code=404, detail="Exam not found")
+    
+    performance = evaluate_exam_performance(exam, answers, time_taken_per_q)
+    
+    if not DB.get("exam_results"):
+        DB["exam_results"] = {}
+    if username not in DB["exam_results"]:
+        DB["exam_results"][username] = []
+    
+    DB["exam_results"][username].append(performance)
+    save_db(DB)
+    
+    return {"status": "success", "performance": performance}
+
+
+@app.get("/api/features/progress-charts")
+async def get_progress_data(username: str = Depends(get_current_user)):
+    """FEATURE 8: Get data for progress visualization charts."""
+    user_analytics = DB.get("analytics", {}).get(username, {})
+    charts = generate_progress_charts(user_analytics)
+    
+    return {"status": "success", "charts": charts}
+
+
+@app.post("/api/features/log-interaction")
+async def log_interaction(
+    interaction_type: str,
+    duration_seconds: int = 0,
+    topic: str = "",
+    username: str = Depends(get_current_user)
+):
+    """Log user interaction for style detection."""
+    if not DB.get("interactions"):
+        DB["interactions"] = {}
+    if username not in DB["interactions"]:
+        DB["interactions"][username] = []
+    
+    DB["interactions"][username].append({
+        "type": interaction_type,
+        "duration": duration_seconds,
+        "topic": topic,
+        "timestamp": datetime.now().isoformat()
+    })
+    save_db(DB)
+    
+    return {"status": "success", "message": "Interaction logged"}
+
+
+@app.post("/api/features/record-problem-attempt")
+async def record_problem(
+    problem_id: str,
+    topic: str,
+    difficulty: int,
+    solved: bool,
+    time_taken: int,
+    hints_used: int = 0,
+    username: str = Depends(get_current_user)
+):
+    """Record problem-solving attempt for adaptive difficulty."""
+    if not DB.get("problem_history"):
+        DB["problem_history"] = {}
+    if username not in DB["problem_history"]:
+        DB["problem_history"][username] = []
+    
+    DB["problem_history"][username].append({
+        "problem_id": problem_id,
+        "topic": topic,
+        "difficulty": difficulty,
+        "solved": solved,
+        "time_taken": time_taken,
+        "hints_used": hints_used,
+        "timestamp": datetime.now().isoformat()
+    })
+    save_db(DB)
+    
+    return {"status": "success", "message": "Problem attempt recorded"}
+
+
+@app.post("/api/features/update-user-analytics")
+async def update_analytics(
+    analytics_data: dict,
+    username: str = Depends(get_current_user)
+):
+    """Update user analytics for progress charts."""
+    if not DB.get("analytics"):
+        DB["analytics"] = {}
+    
+    DB["analytics"][username] = {
+        **DB["analytics"].get(username, {}),
+        **analytics_data,
+        "last_updated": datetime.now().isoformat()
+    }
+    save_db(DB)
+    
+    return {"status": "success", "message": "Analytics updated"}
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
