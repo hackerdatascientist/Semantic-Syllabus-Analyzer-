@@ -1,0 +1,146 @@
+📘 NOTES:
+
+**COs (Course Objectives)**
+
+* **CO1: Understand the concept of quantum computing, qubits, and simple curves**
+	+ Define quantum computing and its applications
+	+ Explain the concept of qubits and their role in quantum computing
+	+ Describe simple quantum curves and their significance in quantum computing
+* **CO2: Design a sample mining plan using HTML and JavaScript**
+	+ Use HTML and JavaScript to design a sample mining plan
+	+ Apply concept of classification techniques in data mining
+	+ Use relevant tools and technologies to implement the plan
+* **CO3: Understand the basics of blockchain and its deployment**
+	+ Define blockchain and its significance in modern computing
+	+ Explain the concept of blockchain and its architecture
+	+ Describe the deployment of blockchain using Docker and Google Cloud
+* **CO4: Apply data mining techniques using machine learning algorithms**
+	+ Use machine learning algorithms to apply data mining techniques
+	+ Explain the concept of supervised and unsupervised learning
+	+ Use relevant tools and technologies to implement data mining techniques
+* **CO5: Design a valid and efficient data mining plan using metrics and testing**
+	+ Use metrics and testing to design a valid and efficient data mining plan
+	+ Explain the concept of data quality and its significance in data mining
+	+ Describe the importance of data governance in data mining
+
+**Unit-4: Machine Learning and Data Mining**
+
+* **Unit-4.1: Machine Learning Fundamentals**
+	+ Introduction to machine learning and its applications
+	+ Types of machine learning algorithms (supervised, unsupervised, reinforcement)
+	+ Use of machine learning in data mining
+* **Unit-4.2: Data Mining Techniques**
+	+ Introduction to data mining techniques
+	+ Types of data mining techniques (classification, regression, clustering)
+	+ Use of data mining in real-world applications
+* **Unit-4.3: Machine Learning and Data Mining Tools**
+	+ Introduction to machine learning and data mining tools
+	+ Use of tools like TensorFlow, PyTorch, and Scikit-learn
+	+ Use of data mining tools like Weka and RapidMiner
+
+**CO6: Understand the concept of cloud computing and its deployment**
+
+* **CO6.1: Introduction to Cloud Computing**
+	+ Define cloud computing and its significance in modern computing
+	+ Explain the concept of cloud computing and its architecture
+	+ Describe the benefits of cloud computing
+* **CO6.2: Cloud Deployment**
+	+ Use cloud providers like Amazon Web Services, Microsoft Azure, and Google Cloud
+	+ Explain the concept of cloud infrastructure and services
+	+ Describe the deployment of cloud applications using Docker and Kubernetes
+
+**CO7: Understand the concept of blockchain and its deployment**
+
+* **CO7.1: Introduction to Blockchain**
+	+ Define blockchain and its significance in modern computing
+	+ Explain the concept of blockchain and its architecture
+	+ Describe the benefits of blockchain
+* **CO7.2: Blockchain Deployment**
+	+ Use blockchain platforms like Hyperledger Fabric and Ethereum
+	+ Explain the concept of smart contracts and their significance
+	+ Describe the deployment of blockchain applications using Docker and Kubernetes
+
+**CO8: Understand the concept of data science and its applications**
+
+* **CO8.1: Introduction to Data Science**
+	+ Define data science and its significance in modern computing
+	+ Explain the concept of data science and its architecture
+	+ Describe the benefits of data science
+* **CO8.2: Data Science Applications**
+	+ Use data science tools like Python, R, and SQL
+	+ Explain the concept of data visualization and its significance
+	+ Describe the deployment of data science applications using Docker and Kubernetes
+
+**CO9: Understand the concept of cybersecurity and its importance**
+
+* **CO9.1: Introduction to Cybersecurity**
+	+ Define cybersecurity and its significance in modern computing
+	+ Explain the concept of cybersecurity and its architecture
+	+ Describe the benefits of cybersecurity
+* **CO9.2: Cybersecurity Applications**
+	+ Use cybersecurity tools like antivirus software and firewalls
+	+ Explain the concept of threat analysis and its significance
+	+ Describe the deployment of cybersecurity applications using Docker and Kubernetes
+
+**CO10: Understand the concept of DevOps and its importance**
+
+* **CO10.1: Introduction to DevOps**
+	+ Define DevOps and its significance in modern computing
+	+ Explain the concept of DevOps and its architecture
+	+ Describe the benefits of DevOps
+* **CO10.2: DevOps Applications**
+	+ Use DevOps tools like Jenkins and Docker
+	+ Explain the concept of continuous integration and continuous deployment
+	+ Describe the deployment of DevOps applications using Docker and Kubernetes
+
+📝 MCQs:
+
+Q1: What is the primary function of a Blockchain in a decentralized network?
+ - To store and manage data reliably
+ - To enable secure transactions between parties
+ - To provide a global identity verification system
+ - None of the above
+✔ Answer: To enable secure transactions between parties
+----------------------------------------
+Q2: What is the name of the 53-qubit quantum computer developed by Google?
+ - Ryerson University Computer
+ - Sycamore quantum computer
+ - IBM Cloud Quantum
+ - Amazon Sagemaker
+✔ Answer: Sycamore quantum computer
+----------------------------------------
+Q3: What type of machine learning algorithm is useful for solving problems where input data can only take on specific categories of values?
+ - Reinforcement Learning
+ - Decision Trees
+ - Clustering
+ - Supervised Learning
+✔ Answer: Decision Trees
+----------------------------------------
+Q4: What is the concept in Blockchain that allows transactions to be made without a central authority?
+ - Smart Contract
+ - Mining
+ - Consensus Mechanism
+ - Cryptographic Hashing
+✔ Answer: Consensus Mechanism
+----------------------------------------
+Q5: What type of network architecture makes use of resources offered by cloud service providers through APIs?
+ - Hybrid Cloud
+ - Infrastructure as a Service (IaaS)
+ - Platform as a Service (PaaS)
+ - Function as a Service (FaaS)
+✔ Answer: Infrastructure as a Service (IaaS)
+----------------------------------------
+Q6: What is the primary difference between a cloud database and a distributed database?
+ - Centralization vs Decentralization
+ - Single-site vs Multi-site deployment
+ - Cloud-based vs On-premises
+ - Managed vs Unmanaged database
+✔ Answer: Single-site vs Multi-site deployment
+----------------------------------------
+Q7: What is the type of network traffic management that involves using external servers that cache content for faster load times?
+ - Load Balancer
+ - Firewall
+ - Content Delivery Network (CDN)
+ - Web Server
+✔ Answer: Content Delivery Network (CDN)
+----------------------------------------

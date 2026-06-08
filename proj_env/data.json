@@ -1,0 +1,959 @@
+{
+    "users": {
+        "50481120-2520-41cd-9b16-c56dad1dc5d0": "sandesh",
+        "fb92450f-c821-426f-b1bb-1a89c54fb5c7": "sandesh",
+        "ba954600-aee0-4324-816d-9c4927a3251b": "pratik",
+        "a670b941-8366-4913-9c4c-291309ffcb9f": "ayush",
+        "4e8cde41-f141-41f1-af27-fe73d79f3b02": "raju",
+        "0c3f5b51-5e5c-4eed-b70f-1efd811d2d3a": "sandesh",
+        "91ebce80-7297-406e-bf89-c7773f26e7b4": "sandesh",
+        "7586aa48-0bfb-40b1-968a-f2f14b87d01e": "Sandesh",
+        "14ff4452-4eff-44c9-906a-10ee24d3f6d8": "Sandesh",
+        "a77e4068-73b1-464c-ac8b-9a5a8740245f": "Sandesh",
+        "bbff8ebb-938b-449d-9d55-eef55921a828": "Tanish111",
+        "221d15c6-c058-44a0-8c27-d54f8bbff109": "sandesh"
+    },
+    "accounts": {
+        "sandesh": {
+            "password": "1234",
+            "display_name": "sandy",
+            "profile": {
+                "energy": "morning",
+                "exam_mode": true
+            }
+        },
+        "pratik": {
+            "password": "92093",
+            "display_name": "palake",
+            "profile": {
+                "energy": "morning",
+                "exam_mode": false
+            }
+        },
+        "ayush": {
+            "password": "7894",
+            "display_name": "ayush",
+            "profile": {
+                "energy": "morning",
+                "exam_mode": true
+            }
+        },
+        "raju": {
+            "password": "1234",
+            "display_name": "raju",
+            "profile": {
+                "energy": "morning",
+                "exam_mode": false
+            }
+        },
+        "Sandesh": {
+            "password": "1234",
+            "display_name": "Sandesh",
+            "profile": {
+                "energy": "morning",
+                "exam_mode": false
+            }
+        },
+        "Tanish111": {
+            "password": "12345",
+            "display_name": "Tanish111",
+            "profile": {
+                "energy": "morning",
+                "exam_mode": false
+            }
+        }
+    },
+    "tasks": {
+        "sandesh": [
+            {
+                "id": 1780372930974,
+                "title": "DSA: Trees (BFS/DFS) (Implementation)",
+                "task_type": "coding",
+                "difficulty": 5,
+                "status": "skipped",
+                "problem_statement": "Solve a 5-star challenge on Trees (BFS/DFS). Focus on time complexity (Big O) and efficient implementation."
+            },
+            {
+                "id": 1780372930975,
+                "title": "DSA: Dynamic Programming (Pattern-matching)",
+                "task_type": "coding",
+                "difficulty": 3,
+                "status": "done",
+                "problem_statement": "Solve a 3-star challenge on Dynamic Programming. Focus on time complexity (Big O) and efficient pattern-matching."
+            },
+            {
+                "id": 1780372930976,
+                "title": "DSA: Bit Manipulation (Theory)",
+                "task_type": "coding",
+                "difficulty": 3,
+                "status": "pending",
+                "problem_statement": "Solve a 3-star challenge on Bit Manipulation. Focus on time complexity (Big O) and efficient theory."
+            },
+            {
+                "id": 1780372930977,
+                "title": "DSA: Array & Hashing (Pattern-matching)",
+                "task_type": "coding",
+                "difficulty": 5,
+                "status": "pending",
+                "problem_statement": "Solve a 5-star challenge on Array & Hashing. Focus on time complexity (Big O) and efficient pattern-matching."
+            },
+            {
+                "id": 1780372930978,
+                "title": "DSA: Tries (Theory)",
+                "task_type": "coding",
+                "difficulty": 2,
+                "status": "pending",
+                "problem_statement": "Solve a 2-star challenge on Tries. Focus on time complexity (Big O) and efficient theory."
+            }
+        ],
+        "pratik": [
+            {
+                "id": 1777871405545,
+                "title": "DSA: Graphs (Dijkstra/BFS/DFS) (Theory)",
+                "task_type": "coding",
+                "difficulty": 3,
+                "status": "pending",
+                "problem_statement": "Solve a 3-star challenge on Graphs (Dijkstra/BFS/DFS). Focus on time complexity (Big O) and efficient theory."
+            },
+            {
+                "id": 1777871405546,
+                "title": "DSA: Array & Hashing (Implementation)",
+                "task_type": "coding",
+                "difficulty": 2,
+                "status": "pending",
+                "problem_statement": "Solve a 2-star challenge on Array & Hashing. Focus on time complexity (Big O) and efficient implementation."
+            },
+            {
+                "id": 1777871405547,
+                "title": "DSA: Stack (Optimization)",
+                "task_type": "coding",
+                "difficulty": 3,
+                "status": "pending",
+                "problem_statement": "Solve a 3-star challenge on Stack. Focus on time complexity (Big O) and efficient optimization."
+            },
+            {
+                "id": 1777871405548,
+                "title": "DSA: Binary Search (Optimization)",
+                "task_type": "coding",
+                "difficulty": 3,
+                "status": "pending",
+                "problem_statement": "Solve a 3-star challenge on Binary Search. Focus on time complexity (Big O) and efficient optimization."
+            },
+            {
+                "id": 1777871405549,
+                "title": "DSA: Two Pointers (Pattern-matching)",
+                "task_type": "coding",
+                "difficulty": 5,
+                "status": "pending",
+                "problem_statement": "Solve a 5-star challenge on Two Pointers. Focus on time complexity (Big O) and efficient pattern-matching."
+            }
+        ],
+        "ayush": [
+            {
+                "id": 1778472929688,
+                "title": "DSA: Heaps / Priority Queues (Theory)",
+                "task_type": "coding",
+                "difficulty": 5,
+                "status": "pending",
+                "problem_statement": "Solve a 5-star challenge on Heaps / Priority Queues. Focus on time complexity (Big O) and efficient theory."
+            },
+            {
+                "id": 1778472929689,
+                "title": "DSA: Dynamic Programming (Pattern-matching)",
+                "task_type": "coding",
+                "difficulty": 3,
+                "status": "pending",
+                "problem_statement": "Solve a 3-star challenge on Dynamic Programming. Focus on time complexity (Big O) and efficient pattern-matching."
+            },
+            {
+                "id": 1778472929690,
+                "title": "DSA: Tries (Theory)",
+                "task_type": "coding",
+                "difficulty": 4,
+                "status": "pending",
+                "problem_statement": "Solve a 4-star challenge on Tries. Focus on time complexity (Big O) and efficient theory."
+            },
+            {
+                "id": 1778472929691,
+                "title": "DSA: Linked List (Pattern-matching)",
+                "task_type": "coding",
+                "difficulty": 3,
+                "status": "pending",
+                "problem_statement": "Solve a 3-star challenge on Linked List. Focus on time complexity (Big O) and efficient pattern-matching."
+            },
+            {
+                "id": 1778472929692,
+                "title": "DSA: Trees (BFS/DFS) (Pattern-matching)",
+                "task_type": "coding",
+                "difficulty": 4,
+                "status": "pending",
+                "problem_statement": "Solve a 4-star challenge on Trees (BFS/DFS). Focus on time complexity (Big O) and efficient pattern-matching."
+            }
+        ],
+        "raju": [
+            {
+                "id": 1779075909599,
+                "title": "DSA: Two Pointers (Optimization)",
+                "task_type": "coding",
+                "difficulty": 4,
+                "status": "skipped",
+                "problem_statement": "Solve a 4-star challenge on Two Pointers. Focus on time complexity (Big O) and efficient optimization."
+            },
+            {
+                "id": 1779075909600,
+                "title": "DSA: Tries (Pattern-matching)",
+                "task_type": "coding",
+                "difficulty": 5,
+                "status": "done",
+                "problem_statement": "Solve a 5-star challenge on Tries. Focus on time complexity (Big O) and efficient pattern-matching."
+            },
+            {
+                "id": 1779075909601,
+                "title": "DSA: Heaps / Priority Queues (Optimization)",
+                "task_type": "coding",
+                "difficulty": 3,
+                "status": "pending",
+                "problem_statement": "Solve a 3-star challenge on Heaps / Priority Queues. Focus on time complexity (Big O) and efficient optimization."
+            },
+            {
+                "id": 1779075909602,
+                "title": "DSA: Bit Manipulation (Pattern-matching)",
+                "task_type": "coding",
+                "difficulty": 5,
+                "status": "pending",
+                "problem_statement": "Solve a 5-star challenge on Bit Manipulation. Focus on time complexity (Big O) and efficient pattern-matching."
+            },
+            {
+                "id": 1779075909603,
+                "title": "DSA: Array & Hashing (Theory)",
+                "task_type": "coding",
+                "difficulty": 5,
+                "status": "pending",
+                "problem_statement": "Solve a 5-star challenge on Array & Hashing. Focus on time complexity (Big O) and efficient theory."
+            }
+        ],
+        "Sandesh": [
+            {
+                "id": 1780389600089,
+                "title": "DSA: Greedy Algorithms (Optimization)",
+                "task_type": "coding",
+                "difficulty": 4,
+                "status": "done",
+                "problem_statement": "Solve a 4-star challenge on Greedy Algorithms. Focus on time complexity (Big O) and efficient optimization."
+            },
+            {
+                "id": 1780389600090,
+                "title": "DSA: Linked List (Optimization)",
+                "task_type": "coding",
+                "difficulty": 5,
+                "status": "pending",
+                "problem_statement": "Solve a 5-star challenge on Linked List. Focus on time complexity (Big O) and efficient optimization."
+            },
+            {
+                "id": 1780389600091,
+                "title": "DSA: Intervals (Optimization)",
+                "task_type": "coding",
+                "difficulty": 3,
+                "status": "done",
+                "problem_statement": "Solve a 3-star challenge on Intervals. Focus on time complexity (Big O) and efficient optimization."
+            },
+            {
+                "id": 1780389600092,
+                "title": "DSA: Bit Manipulation (Implementation)",
+                "task_type": "coding",
+                "difficulty": 2,
+                "status": "pending",
+                "problem_statement": "Solve a 2-star challenge on Bit Manipulation. Focus on time complexity (Big O) and efficient implementation."
+            },
+            {
+                "id": 1780389600093,
+                "title": "DSA: Heaps / Priority Queues (Optimization)",
+                "task_type": "coding",
+                "difficulty": 4,
+                "status": "pending",
+                "problem_statement": "Solve a 4-star challenge on Heaps / Priority Queues. Focus on time complexity (Big O) and efficient optimization."
+            }
+        ],
+        "Tanish111": [
+            {
+                "id": 1780394882256,
+                "title": "DSA: Sliding Window (Theory)",
+                "task_type": "coding",
+                "difficulty": 2,
+                "status": "pending",
+                "problem_statement": "Solve a 2-star challenge on Sliding Window. Focus on time complexity (Big O) and efficient theory."
+            },
+            {
+                "id": 1780394882257,
+                "title": "DSA: Intervals (Pattern-matching)",
+                "task_type": "coding",
+                "difficulty": 5,
+                "status": "pending",
+                "problem_statement": "Solve a 5-star challenge on Intervals. Focus on time complexity (Big O) and efficient pattern-matching."
+            },
+            {
+                "id": 1780394882258,
+                "title": "DSA: Dynamic Programming (Optimization)",
+                "task_type": "coding",
+                "difficulty": 5,
+                "status": "pending",
+                "problem_statement": "Solve a 5-star challenge on Dynamic Programming. Focus on time complexity (Big O) and efficient optimization."
+            },
+            {
+                "id": 1780394882259,
+                "title": "DSA: Bit Manipulation (Optimization)",
+                "task_type": "coding",
+                "difficulty": 3,
+                "status": "pending",
+                "problem_statement": "Solve a 3-star challenge on Bit Manipulation. Focus on time complexity (Big O) and efficient optimization."
+            },
+            {
+                "id": 1780394882260,
+                "title": "DSA: Tries (Optimization)",
+                "task_type": "coding",
+                "difficulty": 4,
+                "status": "pending",
+                "problem_statement": "Solve a 4-star challenge on Tries. Focus on time complexity (Big O) and efficient optimization."
+            }
+        ]
+    },
+    "timetables": {
+        "sandesh": {
+            "days": [
+                {
+                    "name": "sunday",
+                    "date": "sun",
+                    "timeline": [
+                        {
+                            "start": "12:00",
+                            "end": "13:00",
+                            "label": "New block",
+                            "category": "study"
+                        },
+                        {
+                            "start": "12:00",
+                            "end": "13:00",
+                            "label": "New block",
+                            "category": "study"
+                        }
+                    ]
+                },
+                {
+                    "name": "Monday",
+                    "date": "Mon",
+                    "timeline": [
+                        {
+                            "start": "08:00",
+                            "end": "10:00",
+                            "label": "Focus",
+                            "category": "fixed"
+                        },
+                        {
+                            "start": "10:00",
+                            "end": "10:00",
+                            "label": "AI Suggested Break",
+                            "category": "break"
+                        },
+                        {
+                            "start": "12:00",
+                            "end": "13:00",
+                            "label": "New block",
+                            "category": "study"
+                        },
+                        {
+                            "start": "13:00",
+                            "end": "13:00",
+                            "label": "AI Suggested Break",
+                            "category": "break"
+                        },
+                        {
+                            "start": "12:00",
+                            "end": "13:00",
+                            "label": "New block",
+                            "category": "study"
+                        },
+                        {
+                            "start": "13:00",
+                            "end": "13:00",
+                            "label": "AI Suggested Break",
+                            "category": "break"
+                        },
+                        {
+                            "start": "12:00",
+                            "end": "13:00",
+                            "label": "New block",
+                            "category": "study"
+                        }
+                    ]
+                },
+                {
+                    "name": "Tuesday",
+                    "date": "",
+                    "timeline": [
+                        {
+                            "start": "12:00",
+                            "end": "13:00",
+                            "label": "New block",
+                            "category": "study"
+                        }
+                    ]
+                },
+                {
+                    "name": "Wednesday",
+                    "date": "",
+                    "timeline": [
+                        {
+                            "start": "12:00",
+                            "end": "13:00",
+                            "label": "Football",
+                            "category": "sports"
+                        }
+                    ]
+                },
+                {
+                    "name": "Friday",
+                    "date": "",
+                    "timeline": [
+                        {
+                            "start": "10:00",
+                            "end": "10:20",
+                            "label": "",
+                            "category": "study"
+                        }
+                    ]
+                }
+            ],
+            "meta": {
+                "notes": "New Plan"
+            }
+        },
+        "pratik": {
+            "days": [
+                {
+                    "name": "Monday",
+                    "date": "2026-05-04",
+                    "timeline": [
+                        {
+                            "start": "09:00",
+                            "end": "10:00",
+                            "label": "",
+                            "category": "study"
+                        },
+                        {
+                            "start": "09:00",
+                            "end": "10:00",
+                            "label": "",
+                            "category": "study"
+                        }
+                    ]
+                },
+                {
+                    "name": "Tuesday",
+                    "date": "2026-05-04",
+                    "timeline": []
+                },
+                {
+                    "name": "Wednesday",
+                    "date": "2026-05-04",
+                    "timeline": []
+                },
+                {
+                    "name": "Thursday",
+                    "date": "2026-05-04",
+                    "timeline": []
+                },
+                {
+                    "name": "Friday",
+                    "date": "2026-05-04",
+                    "timeline": []
+                },
+                {
+                    "name": "Saturday",
+                    "date": "2026-05-04",
+                    "timeline": []
+                },
+                {
+                    "name": "Sunday",
+                    "date": "2026-05-04",
+                    "timeline": []
+                }
+            ],
+            "meta": {
+                "notes": ""
+            }
+        },
+        "ayush": {
+            "days": [
+                {
+                    "name": "Monday",
+                    "date": "",
+                    "timeline": []
+                },
+                {
+                    "name": "Tuesday",
+                    "date": "",
+                    "timeline": []
+                },
+                {
+                    "name": "Wednesday",
+                    "date": "",
+                    "timeline": []
+                },
+                {
+                    "name": "Thursday",
+                    "date": "",
+                    "timeline": []
+                },
+                {
+                    "name": "Friday",
+                    "date": "",
+                    "timeline": []
+                },
+                {
+                    "name": "Saturday",
+                    "date": "",
+                    "timeline": []
+                },
+                {
+                    "name": "Sunday",
+                    "date": "",
+                    "timeline": []
+                }
+            ],
+            "meta": {
+                "notes": ""
+            }
+        },
+        "raju": {
+            "days": [
+                {
+                    "name": "Monday",
+                    "date": "",
+                    "timeline": []
+                },
+                {
+                    "name": "Tuesday",
+                    "date": "",
+                    "timeline": [
+                        {
+                            "start": "09:00",
+                            "end": "10:00",
+                            "label": "",
+                            "category": ""
+                        },
+                        {
+                            "start": "09:00",
+                            "end": "10:00",
+                            "label": "",
+                            "category": ""
+                        },
+                        {
+                            "start": "09:00",
+                            "end": "10:00",
+                            "label": "",
+                            "category": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Wednesday",
+                    "date": "",
+                    "timeline": []
+                },
+                {
+                    "name": "Thursday",
+                    "date": "",
+                    "timeline": []
+                },
+                {
+                    "name": "Friday",
+                    "date": "",
+                    "timeline": []
+                },
+                {
+                    "name": "Saturday",
+                    "date": "",
+                    "timeline": []
+                },
+                {
+                    "name": "Sunday",
+                    "date": "",
+                    "timeline": []
+                }
+            ],
+            "meta": {
+                "notes": ""
+            }
+        },
+        "Sandesh": {
+            "days": [
+                {
+                    "name": "Monday",
+                    "date": "",
+                    "timeline": []
+                },
+                {
+                    "name": "Tuesday",
+                    "date": "",
+                    "timeline": []
+                },
+                {
+                    "name": "Wednesday",
+                    "date": "",
+                    "timeline": []
+                },
+                {
+                    "name": "Thursday",
+                    "date": "",
+                    "timeline": []
+                },
+                {
+                    "name": "Friday",
+                    "date": "",
+                    "timeline": []
+                },
+                {
+                    "name": "Saturday",
+                    "date": "",
+                    "timeline": []
+                },
+                {
+                    "name": "Sunday",
+                    "date": "",
+                    "timeline": []
+                }
+            ],
+            "meta": {
+                "notes": ""
+            }
+        },
+        "Tanish111": {
+            "days": [
+                {
+                    "name": "Monday",
+                    "date": "",
+                    "timeline": [
+                        {
+                            "start": "09:00",
+                            "end": "10:00",
+                            "label": "Turf",
+                            "category": "Sports"
+                        }
+                    ]
+                },
+                {
+                    "name": "Tuesday",
+                    "date": "",
+                    "timeline": []
+                },
+                {
+                    "name": "Wednesday",
+                    "date": "",
+                    "timeline": []
+                },
+                {
+                    "name": "Thursday",
+                    "date": "",
+                    "timeline": []
+                },
+                {
+                    "name": "Friday",
+                    "date": "",
+                    "timeline": []
+                },
+                {
+                    "name": "Saturday",
+                    "date": "",
+                    "timeline": []
+                },
+                {
+                    "name": "Sunday",
+                    "date": "",
+                    "timeline": []
+                }
+            ],
+            "meta": {
+                "notes": "Football"
+            }
+        }
+    },
+    "focus_sessions": {
+        "ayush": [
+            {
+                "timestamp": 1778472937.2752328,
+                "minutes": 25
+            }
+        ]
+    },
+    "last_analysis": {
+        "notes": "Comprehensive analysis of File: VI-CSE_Final_TYBTech_Sem-VI.pdf focusing on the provided syllabus. Focus areas include core theoretical frameworks and practical application layers.",
+        "structuredNotes": [
+            {
+                "title": "Core Foundations",
+                "summary": "Introduction to the primary concepts of the provided syllabus and historical context.",
+                "keyPoints": [
+                    "Fundamental axioms",
+                    "Evolution of the field",
+                    "Key industry players"
+                ],
+                "pitfalls": [
+                    "Confusing early theories with modern applications",
+                    "Overlooking mathematical proofs"
+                ],
+                "quickRevision": [
+                    "axiom-1",
+                    "history-v2",
+                    "proof-alpha"
+                ]
+            },
+            {
+                "title": "Advanced Applications",
+                "summary": "Implementing theories in real-world scenarios.",
+                "keyPoints": [
+                    "Implementation scaling",
+                    "Edge case handling",
+                    "Optimization techniques"
+                ],
+                "pitfalls": [
+                    "Premature optimization",
+                    "Ignoring environmental constraints"
+                ],
+                "quickRevision": [
+                    "scale-up",
+                    "edge-check"
+                ]
+            }
+        ],
+        "topics": [
+            {
+                "name": "Theoretical Frameworks",
+                "weight": "High",
+                "description": "The backbone of the entire syllabus."
+            },
+            {
+                "name": "Data Systems",
+                "weight": "Medium",
+                "description": "Practical storage and retrieval mechanics."
+            },
+            {
+                "name": "Ethics & Safety",
+                "weight": "Medium",
+                "description": "Ensuring compliant and safe operations."
+            }
+        ],
+        "topicRelationships": [
+            {
+                "from": "Theoretical Frameworks",
+                "to": "Data Systems",
+                "type": "dependency"
+            },
+            {
+                "from": "Data Systems",
+                "to": "Ethics & Safety",
+                "type": "regulatory"
+            }
+        ],
+        "exclusiveInsights": {
+            "syllabusFingerprint": "Highly technical, research-heavy structure with a focus on systems design.",
+            "prerequisiteChain": [
+                "Linear Algebra",
+                "Basic Programming",
+                "Logic Foundations"
+            ],
+            "revisionPriority": [
+                {
+                    "topic": "Theoretical Frameworks",
+                    "priority": "CRITICAL",
+                    "reason": "Appears in 40% of previous exam cycles."
+                },
+                {
+                    "topic": "Data Systems",
+                    "priority": "HIGH",
+                    "reason": "Fundamental for the final project component."
+                }
+            ]
+        },
+        "ambushMode": {},
+        "dpp": [
+            {
+                "text": "In the context of the provided syllabus, what does the term 'Axiom-Alpha' refer to?",
+                "options": [
+                    "The primary consistency rule",
+                    "The first line of code",
+                    "A hardware component",
+                    "The user interface"
+                ],
+                "correctAnswer": "The primary consistency rule"
+            },
+            {
+                "text": "Which of these is a common pitfall in the provided syllabus implementation?",
+                "options": [
+                    "Premature optimization",
+                    "Thorough documentation",
+                    "Regular testing",
+                    "Clear requirements"
+                ],
+                "correctAnswer": "Premature optimization"
+            },
+            {
+                "text": "Which theoretical framework best describes the underlying logic of the provided syllabus?",
+                "options": [
+                    "Systemic Modularism",
+                    "Linear Monolithism",
+                    "Randomized Execution",
+                    "Static Inheritance"
+                ],
+                "correctAnswer": "Systemic Modularism"
+            },
+            {
+                "text": "What role does 'Middleware-Z' play in the lifecycle of the provided syllabus?",
+                "options": [
+                    "Abstraction layer",
+                    "Data storage",
+                    "UI component",
+                    "Network protocol"
+                ],
+                "correctAnswer": "Abstraction layer"
+            },
+            {
+                "text": "What is the most critical security risk associated with the provided syllabus systems?",
+                "options": [
+                    "Injection attacks",
+                    "High power usage",
+                    "Slow response time",
+                    "Excessive logging"
+                ],
+                "correctAnswer": "Injection attacks"
+            }
+        ],
+        "hasPart": []
+    },
+    "verifications": {
+        "sandesh": {
+            "1780372930976": {
+                "question": "In computational complexity theory, how does 'Bit Manipulation' typically help manage complexity?",
+                "options": [
+                    "By compressing data objects using Huffman coding algorithms.",
+                    "By organizing elements to enable logarithmic search, divide-and-conquer divisions, or constant-time accesses.",
+                    "By validating cryptographic hash signatures across nodes.",
+                    "By compiling dynamic inputs into machine code binary instructions."
+                ],
+                "correctIndex": 1
+            },
+            "1780372930977": {
+                "question": "What is the key indicator that a coding problem can be solved using the 'Array & Hashing' pattern?",
+                "options": [
+                    "The input is guaranteed to be a stream of text from an external network connection.",
+                    "The requirements focus heavily on graphical display layout and form submission.",
+                    "The problem asks for contiguous ranges, pairs of numbers, or traversal of hierarchical nodes.",
+                    "The problem specifies that the execution environment is highly parallel."
+                ],
+                "correctIndex": 2
+            },
+            "1780372930978": {
+                "question": "Which verification step is most important for successfully completing 'Tries'?",
+                "options": [
+                    "Check the solution against edge cases and constraints",
+                    "Submit immediately without reviewing",
+                    "Ignore performance considerations",
+                    "Replace the task with a different topic"
+                ],
+                "correctIndex": 0
+            }
+        },
+        "Sandesh": {
+            "1780385481362": {
+                "question": "Which verification step is most important for successfully completing 'Trees'?",
+                "options": [
+                    "Check the solution against edge cases and constraints",
+                    "Submit immediately without reviewing",
+                    "Ignore performance considerations",
+                    "Replace the task with a different topic"
+                ],
+                "correctIndex": 0
+            },
+            "1780385481363": {
+                "question": "Which verification step is most important for successfully completing 'Dynamic Programming'?",
+                "options": [
+                    "Check the solution against edge cases and constraints",
+                    "Submit immediately without reviewing",
+                    "Ignore performance considerations",
+                    "Replace the task with a different topic"
+                ],
+                "correctIndex": 0
+            },
+            "1780388128200": {
+                "question": "Which verification step is most important for successfully completing 'Dynamic Programming'?",
+                "options": [
+                    "Check the solution against edge cases and constraints",
+                    "Submit immediately without reviewing",
+                    "Ignore performance considerations",
+                    "Replace the task with a different topic"
+                ],
+                "correctIndex": 0
+            },
+            "1780388128204": {
+                "question": "Which verification step is most important for successfully completing 'Sliding Window'?",
+                "options": [
+                    "Check the solution against edge cases and constraints",
+                    "Submit immediately without reviewing",
+                    "Ignore performance considerations",
+                    "Replace the task with a different topic"
+                ],
+                "correctIndex": 0
+            },
+            "1780388311310": {
+                "question": "Which standard algorithm or structure is a direct application of the 'Heaps / Priority Queues' pattern?",
+                "options": [
+                    "Classic traversal techniques, window expansion/contraction, or stack-based backtracking.",
+                    "Universal relational database indexing schemas.",
+                    "Asymmetric public key generation methods.",
+                    "RESTful API route matching algorithms."
+                ],
+                "correctIndex": 0
+            },
+            "1780388311312": {
+                "question": "Which verification step is most important for successfully completing 'Tries'?",
+                "options": [
+                    "Check the solution against edge cases and constraints",
+                    "Submit immediately without reviewing",
+                    "Ignore performance considerations",
+                    "Replace the task with a different topic"
+                ],
+                "correctIndex": 0
+            },
+            "1780389600090": {
+                "question": "If your initial solution for 'Linked List' has O(N^2) time complexity, what is the best strategy to optimize it?",
+                "options": [
+                    "Sort the dataset multiple times at each step of the iteration.",
+                    "Split the loops into multiple functions to distribute execution overhead.",
+                    "Wrap the nested loops inside a try-catch block to bypass CPU cycle limits.",
+                    "Introduce a hash map for O(1) lookups or leverage sorted order with two pointers."
+                ],
+                "correctIndex": 3
+            },
+            "1780389600093": {
+                "question": "If your initial solution for 'Heaps / Priority Queues' has O(N^2) time complexity, what is the best strategy to optimize it?",
+                "options": [
+                    "Wrap the nested loops inside a try-catch block to bypass CPU cycle limits.",
+                    "Introduce a hash map for O(1) lookups or leverage sorted order with two pointers.",
+                    "Split the loops into multiple functions to distribute execution overhead.",
+                    "Sort the dataset multiple times at each step of the iteration."
+                ],
+                "correctIndex": 1
+            }
+        },
+        "Tanish111": {
+            "1780394882256": {
+                "question": "What is the fundamental theoretical property defining 'Sliding Window'?",
+                "options": [
+                    "Continuous algebraic distribution under a bell curve.",
+                    "Non-deterministic execution paths governed by random seed values.",
+                    "State preservation across asynchronous network transport layers.",
+                    "Structured relationships like parent-child hierarchies, strict ordering, or LIFO/FIFO constraints."
+                ],
+                "correctIndex": 3
+            }
+        }
+    }
+}

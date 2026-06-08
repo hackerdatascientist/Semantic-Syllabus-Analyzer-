@@ -1,0 +1,13 @@
+Activating virtual env
+
+# On Windows Command Prompt:
+Scripts\activate.bat
+
+# OR if using PowerShell:
+Scripts\Activate.ps1
+
+
+
+
+used for running backend 
+uvicorn backend:app --reload --host localhost --port 8000

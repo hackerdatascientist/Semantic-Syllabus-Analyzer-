@@ -1,0 +1,21 @@
+# Virtual environment files
+/Include/
+/Lib/
+/Scripts/
+/etc/
+/share/
+/pyvenv.cfg
+/.lock
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Runtime/generated files
+*.log
+*.db
+__edge_profile/
+temp_excel/
+
+# Build/archive outputs
+*.zip

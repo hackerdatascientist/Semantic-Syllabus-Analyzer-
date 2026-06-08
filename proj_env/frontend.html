@@ -1,0 +1,2788 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Syllabus Studio & Student Manager</title>
+        <script src="https://js.puter.com/v2/"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+        <style>
+            :root {
+                --bg: #06080f;
+                --panel: rgba(12, 16, 28, 0.8);
+                --panel-border: rgba(122, 162, 255, 0.25);
+                --text: #e8ecff;
+                --muted: #a5b0d8;
+                --accent: #64f4ac;
+                --accent-2: #5da9ff;
+                --warn: #ffb347;
+                --danger: #ff6b7a;
+                --chat-user: rgba(93, 169, 255, 0.22);
+                --chat-assistant: rgba(100, 244, 172, 0.12);
+                --radius: 12px;
+            }
+
+            * { box-sizing: border-box; }
+
+            body {
+                margin: 0;
+                min-height: 100vh;
+                font-family: "Segoe UI", Inter, Arial, sans-serif;
+                color: var(--text);
+                background: radial-gradient(circle at top right, #151a36 0%, var(--bg) 45%, #030409 100%);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                padding: 24px;
+                overflow-x: hidden;
+                gap: 8px;
+            }
+
+            #bg3d {
+                position: fixed;
+                inset: 0;
+                z-index: -1;
+                opacity: 0.75;
+            }
+
+            .app {
+                width: 100%;
+                max-width: 1060px;
+                border: 1px solid var(--panel-border);
+                border-radius: 16px;
+                background: var(--panel);
+                backdrop-filter: blur(8px);
+                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+                padding: 22px;
+            }
+
+            h1 {
+                margin: 0 0 8px;
+                text-align: center;
+                font-size: 1.5rem;
+                letter-spacing: 0.4px;
+            }
+
+            .sub {
+                margin: 0 0 20px;
+                text-align: center;
+                color: var(--muted);
+                font-size: 0.92rem;
+            }
+
+            .grid {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .input-card {
+                border: 1px solid var(--panel-border);
+                border-radius: var(--radius);
+                padding: 14px;
+                background: rgba(255, 255, 255, 0.02);
+            }
+
+            .label-row {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 8px;
+                color: var(--muted);
+                font-size: 0.9rem;
+            }
+
+            input[type="file"], textarea {
+                width: 100%;
+                border-radius: 10px;
+                border: 1px solid rgba(167, 187, 255, 0.24);
+                background: rgba(0, 0, 0, 0.35);
+                color: var(--text);
+                padding: 10px;
+            }
+
+            input[type="file"]::file-selector-button {
+                margin-right: 12px;
+                padding: 8px 14px;
+                border-radius: 8px;
+                border: 1px solid rgba(122, 162, 255, 0.35);
+                background: rgba(93, 169, 255, 0.2);
+                color: #e8ecff;
+                font-weight: 600;
+                cursor: pointer;
+            }
+
+            textarea {
+                resize: vertical;
+                min-height: 110px;
+                line-height: 1.45;
+            }
+
+            .helper {
+                margin-top: 8px;
+                color: var(--muted);
+                font-size: 0.8rem;
+            }
+
+            .btn-row {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+                margin-top: 8px;
+            }
+
+            button {
+                border: none;
+                border-radius: 10px;
+                padding: 12px 10px;
+                color: #05100a;
+                font-weight: 700;
+                cursor: pointer;
+                transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+            }
+
+            button:hover { transform: translateY(-1px); }
+            button:active { transform: translateY(0); }
+
+            .run-btn {
+                background: linear-gradient(90deg, var(--accent), #70ffd1);
+                box-shadow: 0 0 0 1px rgba(100, 244, 172, 0.25), 0 8px 22px rgba(100, 244, 172, 0.2);
+            }
+
+            .refresh-btn {
+                background: linear-gradient(90deg, var(--warn), #ffc977);
+                box-shadow: 0 0 0 1px rgba(255, 179, 71, 0.28), 0 8px 22px rgba(255, 179, 71, 0.2);
+            }
+
+            .save-btn {
+                background: linear-gradient(90deg, var(--accent-2), #80c8ff);
+                box-shadow: 0 0 0 1px rgba(93, 169, 255, 0.28), 0 8px 22px rgba(93, 169, 255, 0.2);
+            }
+
+            #status {
+                margin-top: 14px;
+                border: 1px solid var(--panel-border);
+                border-radius: 10px;
+                padding: 10px 12px;
+                background: rgba(255, 255, 255, 0.02);
+                font-size: 0.9rem;
+                color: var(--muted);
+            }
+
+            #status.success { color: #9effcf; border-color: rgba(100, 244, 172, 0.35); }
+            #status.error { color: #ffc2c9; border-color: rgba(255, 107, 122, 0.45); }
+
+            .tabs {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
+                margin: 14px 0 10px;
+            }
+
+            .tab {
+                text-align: center;
+                border: 1px solid var(--panel-border);
+                border-radius: 10px;
+                padding: 10px 8px;
+                color: var(--muted);
+                cursor: pointer;
+                user-select: none;
+                background: rgba(255, 255, 255, 0.01);
+            }
+
+            .tab.active-tab {
+                color: #041112;
+                background: linear-gradient(90deg, var(--accent), #93ddff);
+                font-weight: 700;
+                border-color: transparent;
+            }
+
+            #output {
+                border: 1px solid var(--panel-border);
+                border-radius: 10px;
+                min-height: 400px;
+                padding: 20px;
+                background: rgba(0, 0, 0, 0.32);
+                overflow-x: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .empty { color: var(--muted); }
+            .section-title { margin: 0 0 10px; font-size: 1.04rem; }
+            .notes-headline {
+                margin: 0 0 12px;
+                color: #b6f7d4;
+                font-size: 0.95rem;
+                line-height: 1.5;
+            }
+
+            .topic-chip-wrap {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-bottom: 14px;
+            }
+
+            .topic-chip {
+                padding: 6px 10px;
+                border-radius: 999px;
+                border: 1px solid rgba(147, 221, 255, 0.35);
+                background: rgba(93, 169, 255, 0.14);
+                font-size: 0.82rem;
+            }
+
+            .notes-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+                gap: 12px;
+                margin-bottom: 14px;
+            }
+
+            .note-card {
+                border: 1px solid rgba(122, 162, 255, 0.28);
+                border-radius: 12px;
+                padding: 12px;
+                background: rgba(255, 255, 255, 0.03);
+            }
+
+            .note-card h4 {
+                margin: 0 0 8px;
+                font-size: 0.97rem;
+                color: #bde2ff;
+            }
+
+            .note-summary {
+                margin: 0 0 8px;
+                color: #dfe8ff;
+                font-size: 0.88rem;
+                line-height: 1.45;
+            }
+
+            .mini-title {
+                margin: 8px 0 4px;
+                font-size: 0.78rem;
+                color: #9ecbff;
+                text-transform: uppercase;
+                letter-spacing: 0.4px;
+            }
+
+            .mini-list {
+                margin: 0;
+                padding-left: 16px;
+                line-height: 1.45;
+                font-size: 0.85rem;
+            }
+
+            .exclusive-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 12px;
+                margin-top: 12px;
+            }
+
+            .exclusive-card {
+                border: 1px solid rgba(100, 244, 172, 0.35);
+                border-radius: 12px;
+                padding: 12px;
+                background: rgba(100, 244, 172, 0.09);
+            }
+
+            .exclusive-card h4 {
+                margin: 0 0 8px;
+                color: #b7ffd8;
+                font-size: 0.92rem;
+            }
+
+            .exclusive-body {
+                font-size: 0.85rem;
+                color: #eafaf0;
+                line-height: 1.5;
+            }
+
+            .question-card {
+                border: 1px solid rgba(167, 187, 255, 0.2);
+                border-radius: 10px;
+                padding: 12px;
+                background: rgba(255, 255, 255, 0.02);
+                margin-bottom: 10px;
+            }
+
+            .question-title { margin-bottom: 8px; font-weight: 600; line-height: 1.5; }
+            .option { margin-left: 14px; margin-bottom: 4px; color: #e3e9ff; }
+            .answer { margin-top: 8px; color: #9effcf; font-weight: 600; }
+
+            .er-fallback {
+                margin-top: 10px;
+                white-space: pre-wrap;
+                font-size: 0.82rem;
+                color: #9ecbff;
+                border: 1px solid rgba(147, 221, 255, 0.2);
+                border-radius: 8px;
+                padding: 10px;
+                background: rgba(0, 0, 0, 0.3);
+            }
+
+            .chat-wrap {
+                display: grid;
+                grid-template-rows: 1fr auto;
+                gap: 12px;
+                min-height: 360px;
+            }
+
+            .chat-messages {
+                border: 1px solid rgba(122, 162, 255, 0.2);
+                border-radius: 10px;
+                padding: 10px;
+                background: rgba(0, 0, 0, 0.28);
+                overflow-y: auto;
+                max-height: 420px;
+            }
+
+            .chat-msg {
+                margin-bottom: 10px;
+                padding: 10px;
+                border-radius: 10px;
+                line-height: 1.45;
+                white-space: pre-wrap;
+                font-size: 0.9rem;
+            }
+
+            .chat-msg.user { background: var(--chat-user); border: 1px solid rgba(93, 169, 255, 0.35); }
+            .chat-msg.assistant { background: var(--chat-assistant); border: 1px solid rgba(100, 244, 172, 0.3); }
+            .chat-meta { font-size: 0.75rem; color: #b2c0ea; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+
+            .chat-input-wrap {
+                display: grid;
+                grid-template-columns: 1fr auto;
+                gap: 10px;
+                align-items: end;
+            }
+
+            #chat_input { min-height: 90px; }
+
+            .chat-send-btn {
+                background: linear-gradient(90deg, var(--accent-2), #8ad2ff);
+                min-width: 140px;
+                height: 42px;
+                color: #041112;
+            }
+
+            .loader {
+                width: 30px;
+                height: 30px;
+                border-radius: 999px;
+                border: 3px solid rgba(255, 255, 255, 0.2);
+                border-top-color: var(--accent);
+                animation: spin 0.9s linear infinite;
+                margin: 8px auto;
+            }
+
+            .loading-text { text-align: center; color: var(--muted); }
+
+            @keyframes spin {
+                to { transform: rotate(360deg); }
+            }
+
+            @media (max-width: 900px) {
+                .tabs { grid-template-columns: repeat(2, 1fr); }
+            }
+
+            @media (max-width: 760px) {
+                body { padding: 12px; }
+                .app { padding: 14px; }
+                .btn-row { grid-template-columns: 1fr; }
+                .chat-input-wrap { grid-template-columns: 1fr; }
+            }
+
+            .suite-bar {
+                width: 100%;
+                max-width: 1060px;
+                margin: 0 auto 12px;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .suite-btn {
+                border-radius: 12px;
+                padding: 12px;
+                border: 1px solid var(--panel-border);
+                background: rgba(255, 255, 255, 0.03);
+                color: var(--muted);
+                font-weight: 700;
+                cursor: pointer;
+                transition: transform .15s ease, box-shadow .15s ease;
+            }
+
+            .suite-btn:hover { transform: translateY(-1px); }
+
+            .suite-btn.active-suite {
+                color: #041112;
+                background: linear-gradient(90deg, var(--accent-2), #8ad2ff);
+                border-color: transparent;
+                box-shadow: 0 8px 22px rgba(93, 169, 255, 0.2);
+            }
+
+            [hidden] { display: none !important; }
+
+            .os-toolbar {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 12px;
+            }
+
+            .os-auth { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-start; width: 100%; }
+
+            .os-auth-fields {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                width: 100%;
+                max-width: 520px;
+            }
+
+            .os-input-wide { width: 100%; min-width: 0; }
+
+            .os-auth-hint { margin: 0; line-height: 1.45; max-width: 520px; }
+
+            .os-auth-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+
+            .os-input {
+                border-radius: 10px;
+                border: 1px solid rgba(167, 187, 255, 0.24);
+                background: rgba(0, 0, 0, 0.35);
+                color: var(--text);
+                padding: 8px 10px;
+                min-width: 160px;
+            }
+
+            .os-input.tall { min-height: 90px; width: 100%; }
+
+            .os-btn {
+                border: none;
+                border-radius: 10px;
+                padding: 10px 12px;
+                font-weight: 700;
+                cursor: pointer;
+                background: linear-gradient(90deg, var(--accent-2), #8ad2ff);
+                color: #041112;
+            }
+
+            .os-btn.secondary { background: linear-gradient(90deg, var(--accent), #70ffd1); }
+            .os-btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--panel-border); }
+            .os-btn.small { padding: 6px 10px; font-size: 0.85rem; }
+            .os-btn.danger { background: #ff6b7a; color: #fff; }
+            .os-tab.disabled {
+                opacity: 0.45;
+                pointer-events: none;
+            }
+
+            .os-chip {
+                border: 1px solid rgba(147, 221, 255, 0.35);
+                border-radius: 999px;
+                padding: 6px 10px;
+                font-size: 0.85rem;
+                color: var(--muted);
+            }
+
+            .os-tabs { grid-template-columns: repeat(3, 1fr); }
+
+            /* Native date/time controls follow a dark scheme inside Student Manager */
+            #suite-student-os {
+                color-scheme: dark;
+                color: var(--text);
+            }
+
+            #suite-student-os .os-auth-fields .os-input,
+            #suite-student-os .os-focus textarea.os-input,
+            #suite-student-os .os-focus .os-input {
+                background: rgba(8, 12, 28, 0.92);
+                color: #e8eeff;
+                caret-color: #9ecbff;
+                border: 1px solid rgba(167, 187, 255, 0.45);
+            }
+
+            #suite-student-os .os-auth-fields .os-input::placeholder,
+            #suite-student-os .os-focus textarea.os-input::placeholder {
+                color: rgba(180, 195, 235, 0.72);
+            }
+
+            #suite-student-os #os-task-list {
+                color: var(--text);
+            }
+
+            #suite-student-os .os-task-title {
+                color: #f2f5ff;
+                font-size: 1.02rem;
+                line-height: 1.35;
+            }
+
+            #suite-student-os .os-task .helper {
+                color: var(--muted);
+            }
+
+            #suite-student-os .os-task-problem-text {
+                margin: 0;
+                color: #e4e9ff;
+                line-height: 1.55;
+            }
+
+            .os-panel {
+                border: 1px solid var(--panel-border);
+                border-radius: 12px;
+                padding: 14px;
+                background: rgba(0, 0, 0, 0.28);
+                min-height: 320px;
+            }
+
+            .os-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                gap: 12px;
+            }
+
+            .os-card {
+                border: 1px solid rgba(122, 162, 255, 0.28);
+                border-radius: 12px;
+                padding: 12px;
+                background: rgba(255, 255, 255, 0.03);
+            }
+
+            .os-card.wide { grid-column: 1 / -1; }
+
+            .os-metric { font-size: 2rem; font-weight: 800; color: #bde2ff; }
+            .os-label { color: var(--muted); font-size: 0.85rem; margin-bottom: 6px; }
+
+            .os-days {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                gap: 10px;
+                margin-top: 12px;
+            }
+
+            .os-day {
+                border: 1px solid rgba(122, 162, 255, 0.2);
+                border-radius: 10px;
+                padding: 10px;
+                background: rgba(255, 255, 255, 0.02);
+            }
+
+            .os-slot-list { margin: 0; padding-left: 16px; color: #dfe8ff; font-size: 0.88rem; line-height: 1.45; }
+
+            .os-pill {
+                display: inline-block;
+                padding: 2px 8px;
+                border-radius: 999px;
+                font-size: 0.72rem;
+                margin-right: 6px;
+                text-transform: uppercase;
+                letter-spacing: 0.4px;
+            }
+
+            .os-pill.fixed { background: rgba(255, 179, 71, 0.18); color: #ffd7a8; }
+            .os-pill.optional { background: rgba(93, 169, 255, 0.18); color: #bde2ff; }
+            .os-pill.study { background: rgba(100, 244, 172, 0.16); color: #b7ffd8; }
+            .os-pill.break { background: rgba(255, 255, 255, 0.08); color: var(--muted); }
+
+            .os-task {
+                display: flex;
+                justify-content: space-between;
+                gap: 10px;
+                border: 1px solid rgba(167, 187, 255, 0.18);
+                border-radius: 10px;
+                padding: 10px;
+                margin-bottom: 8px;
+                background: rgba(255, 255, 255, 0.02);
+            }
+
+            .os-task-title { font-weight: 700; }
+
+            .os-task-actions { display: flex; flex-direction: column; gap: 6px; }
+
+            .os-task-body { flex: 1; min-width: 0; }
+
+            .os-task-problem {
+                margin-top: 8px;
+                padding: 10px;
+                border-radius: 8px;
+                background: rgba(0, 0, 0, 0.22);
+                border: 1px solid rgba(122, 162, 255, 0.15);
+                font-size: 0.88rem;
+                line-height: 1.5;
+                color: #e8eeff;
+            }
+
+            .os-task-problem-label {
+                font-size: 0.7rem;
+                text-transform: uppercase;
+                letter-spacing: 0.55px;
+                color: var(--muted);
+                margin-bottom: 6px;
+            }
+
+            .os-task-timer-row {
+                margin-top: 10px;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .os-task-clock {
+                font-variant-numeric: tabular-nums;
+                font-weight: 700;
+                color: #9dffb4;
+                min-width: 3.4em;
+                font-size: 0.95rem;
+            }
+
+            .os-slot-edit-list {
+                margin-top: 10px;
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .os-day-edit {
+                padding-bottom: 8px;
+                border-bottom: 1px solid rgba(122, 162, 255, 0.12);
+            }
+
+            .os-day-edit:last-of-type {
+                border-bottom: none;
+            }
+
+            .os-slot-edit-row {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                padding: 12px;
+                border-radius: 10px;
+                border: 1px solid rgba(122, 162, 255, 0.32);
+                background: rgba(10, 16, 36, 0.75);
+                box-sizing: border-box;
+            }
+
+            .os-slot-edit-fields {
+                display: grid;
+                grid-template-columns: minmax(0, 7.25rem) minmax(0, 7.25rem) minmax(0, 8.75rem);
+                gap: 10px;
+                align-items: center;
+            }
+
+            .os-slot-edit-fields input[name="label"] {
+                grid-column: 1 / -1;
+                min-height: 46px;
+                padding: 12px 14px;
+            }
+
+            .os-slot-edit-row .os-input,
+            .os-slot-edit-row input[type="time"],
+            .os-slot-edit-row select {
+                min-width: 0 !important;
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+                background: rgba(6, 10, 24, 0.95) !important;
+                color: #e8eeff !important;
+                border: 1px solid rgba(167, 187, 255, 0.45) !important;
+            }
+
+            .os-slot-edit-row select option {
+                background: #0f1528;
+                color: #e8eeff;
+            }
+
+            .os-slot-edit-row input::placeholder {
+                color: rgba(200, 210, 255, 0.5);
+            }
+
+            .os-slot-edit-actions {
+                display: flex;
+                justify-content: flex-end;
+                padding-top: 8px;
+                margin-top: 2px;
+                border-top: 1px solid rgba(122, 162, 255, 0.18);
+            }
+
+            .os-slot-edit-actions .os-btn.small {
+                flex-shrink: 0;
+            }
+
+            textarea.os-timetable-meta,
+            #os-timetable-meta-notes.os-input {
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+                min-width: 0 !important;
+                background: rgba(6, 10, 24, 0.95) !important;
+                color: #e8eeff !important;
+                border: 1px solid rgba(167, 187, 255, 0.45) !important;
+            }
+
+            @media (max-width: 720px) {
+                .os-slot-edit-fields {
+                    grid-template-columns: 1fr 1fr;
+                }
+
+                .os-slot-edit-fields input[name="label"] {
+                    grid-column: 1 / -1;
+                }
+
+                .os-slot-edit-fields select[name="category"] {
+                    grid-column: 1 / -1;
+                }
+            }
+
+            .os-focus { display: grid; gap: 10px; }
+
+            .os-banner {
+                margin-top: 12px;
+                border: 1px solid rgba(100, 244, 172, 0.35);
+                border-radius: 10px;
+                padding: 10px;
+                background: rgba(100, 244, 172, 0.08);
+                color: #eafaf0;
+            }
+
+            @media (max-width: 900px) {
+                .os-tabs { grid-template-columns: repeat(2, 1fr); }
+            }
+
+            /* ChatGPT-style improvements */
+            .chat-response-style {
+                color: var(--text);
+            }
+
+            .chat-response-style h3 {
+                font-size: 1.3rem;
+                margin: 25px 0 15px 0;
+                color: #64f4ac;
+                border-left: 4px solid #64f4ac;
+                padding-left: 12px;
+                font-weight: 700;
+            }
+
+            .chat-response-style h4 {
+                font-size: 1.05rem;
+                margin: 18px 0 12px 0;
+                color: #5da9ff;
+                font-weight: 700;
+            }
+
+            .chat-response-style p {
+                margin: 12px 0;
+                line-height: 1.7;
+                color: #dfe8ff;
+            }
+
+            .chat-response-style ul, .chat-response-style ol {
+                margin: 12px 0;
+                padding-left: 24px;
+                line-height: 1.8;
+            }
+
+            .chat-response-style li {
+                margin: 8px 0;
+                color: #dfe8ff;
+            }
+
+            .chat-response-style strong {
+                color: #64f4ac;
+                font-weight: 600;
+            }
+
+            .chat-response-style blockquote {
+                border-left: 4px solid #5da9ff;
+                padding: 12px 16px;
+                margin: 15px 0;
+                background: rgba(93, 169, 255, 0.1);
+                border-radius: 6px;
+                color: #b6f7d4;
+                font-style: italic;
+            }
+
+            .chat-response-style pre {
+                background: rgba(0, 0, 0, 0.5) !important;
+                border: 1px solid rgba(93, 169, 255, 0.3) !important;
+                padding: 16px !important;
+                border-radius: 8px !important;
+                overflow-x: auto;
+                color: #5da9ff !important;
+            }
+
+            .chat-response-style table {
+                width: 100% !important;
+                border-collapse: collapse !important;
+                margin: 15px 0 !important;
+                background: rgba(93, 169, 255, 0.08) !important;
+                border-radius: 8px !important;
+                overflow: hidden !important;
+            }
+
+            .chat-response-style td, .chat-response-style th {
+                padding: 10px 12px !important;
+                border: 1px solid rgba(93, 169, 255, 0.2) !important;
+                text-align: left !important;
+            }
+
+            .chat-response-style th {
+                background: rgba(93, 169, 255, 0.15) !important;
+                color: #5da9ff !important;
+                font-weight: 700 !important;
+            }
+
+            .dpp-container {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .dpp-question-card {
+                border: 1px solid rgba(93, 169, 255, 0.3);
+                border-radius: 12px;
+                padding: 18px;
+                background: linear-gradient(135deg, rgba(93, 169, 255, 0.08) 0%, rgba(100, 244, 172, 0.04) 100%);
+                transition: transform 0.2s, box-shadow 0.2s;
+            }
+
+            .dpp-question-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 24px rgba(93, 169, 255, 0.15);
+            }
+
+            .dpp-question-number {
+                font-size: 0.85rem;
+                color: #5da9ff;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                margin-bottom: 8px;
+            }
+
+            .dpp-question-text {
+                font-size: 1.05rem;
+                font-weight: 600;
+                color: #e8ecff;
+                margin: 8px 0 16px 0;
+                line-height: 1.6;
+            }
+
+            .dpp-options {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin: 14px 0 16px 0;
+            }
+
+            .dpp-option {
+                padding: 10px 14px;
+                border-radius: 8px;
+                border: 1px solid rgba(167, 187, 255, 0.2);
+                background: rgba(255, 255, 255, 0.02);
+                color: #dfe8ff;
+                line-height: 1.5;
+                transition: all 0.2s;
+                cursor: pointer;
+            }
+
+            .dpp-option:hover {
+                background: rgba(93, 169, 255, 0.1);
+                border-color: rgba(93, 169, 255, 0.4);
+            }
+
+            .dpp-answer-box {
+                margin-top: 14px;
+                padding: 14px;
+                border-radius: 8px;
+                background: rgba(100, 244, 172, 0.12);
+                border: 1px solid rgba(100, 244, 172, 0.3);
+                border-left: 4px solid #64f4ac;
+            }
+
+            .dpp-answer-label {
+                font-size: 0.75rem;
+                color: #64f4ac;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                font-weight: 700;
+                margin-bottom: 6px;
+            }
+
+            .dpp-answer-text {
+                font-weight: 600;
+                color: #b6f7d4;
+                font-size: 1rem;
+            }
+
+            .notes-header {
+                font-size: 1.25rem;
+                font-weight: 700;
+                color: #64f4ac;
+                margin-bottom: 20px;
+                padding-bottom: 12px;
+                border-bottom: 2px solid rgba(100, 244, 172, 0.3);
+            }
+
+            .strict-focus-banner {
+                background: rgba(255, 107, 122, 0.18);
+                border: 1px solid rgba(255, 107, 122, 0.35);
+                color: #ffe8e8;
+                padding: 14px 16px;
+                border-radius: 14px;
+                margin-top: 14px;
+                font-size: 0.98rem;
+                line-height: 1.5;
+            }
+
+            .strict-focus-overlay {
+                position: fixed;
+                inset: 0;
+                z-index: 9999;
+                background: rgba(2, 5, 20, 0.94);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 24px;
+                color: #fff;
+                text-align: center;
+                font-size: 1rem;
+                backdrop-filter: blur(10px);
+            }
+
+            .strict-focus-overlay .overlay-card {
+                max-width: 560px;
+                width: 100%;
+                border-radius: 16px;
+                background: rgba(10, 12, 24, 0.95);
+                border: 1px solid rgba(255, 107, 122, 0.35);
+                padding: 24px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            }
+
+            .strict-focus-overlay .overlay-card h2 {
+                margin-top: 0;
+                margin-bottom: 12px;
+                color: #ffb8b8;
+                font-size: 1.35rem;
+            }
+
+            .strict-focus-overlay .overlay-card p {
+                margin: 8px 0;
+                color: #eef4ff;
+            }
+
+            .strict-focus-overlay .overlay-card .strict-focus-countdown {
+                display: block;
+                margin: 16px auto 0;
+                font-size: 3rem;
+                font-weight: 800;
+                letter-spacing: 0.08em;
+                color: #64f4ac;
+            }
+
+            .strict-focus-overlay .overlay-card button {
+                margin-top: 18px;
+                padding: 12px 16px;
+                border: none;
+                border-radius: 12px;
+                background: #ff6b7a;
+                color: #fff;
+                font-weight: 700;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="bg3d"></canvas>
+
+        <div class="suite-bar">
+            <button type="button" class="suite-btn active-suite" id="suite-btn-syllabus">Semantic Syllabus</button>
+            <button type="button" class="suite-btn" id="suite-btn-os">Student Manager</button>
+        </div>
+
+        <div id="suite-syllabus">
+        <main class="app">
+            <h1>Semantic Syllabus Analyzer</h1>
+            <p class="sub">Generate syllabus-focused notes, DPP sets, and Ambush Mode that predicts exam traps before they hit you.</p>
+
+            <div class="grid">
+                <section class="input-card">
+                    <div class="label-row">
+                        <label for="syllabus_in">Syllabus PDF</label>
+                        <span>Required if no text is pasted</span>
+                    </div>
+                    <input type="file" id="syllabus_in" accept=".pdf">
+                    <div class="helper">Upload syllabus as PDF, or paste syllabus text below.</div>
+                </section>
+
+                <section class="input-card">
+                    <div class="label-row">
+                        <label for="book_in">Reference Book PDF</label>
+                        <span>Optional</span>
+                    </div>
+                    <input type="file" id="book_in" accept=".pdf">
+                </section>
+
+                <section class="input-card">
+                    <div class="label-row">
+                        <label for="syllabus_text">Syllabus Text</label>
+                        <span>Alternative to syllabus PDF</span>
+                    </div>
+                    <textarea id="syllabus_text" placeholder="Paste syllabus text here..."></textarea>
+                </section>
+            </div>
+
+            <div class="btn-row" style="grid-template-columns: repeat(2, 1fr);">
+                <button type="button" class="run-btn" onclick="processData()">▶ Run Analysis</button>
+                <button type="button" class="refresh-btn" onclick="refreshData()">🔄 Refresh DPP</button>
+            </div>
+
+            <div id="status">Status: waiting for input.</div>
+
+            <div class="tabs">
+                <div id="btn-notes" class="tab active-tab" onclick="toggleView('notes')">Notes Studio</div>
+                <div id="btn-dpp" class="tab" onclick="toggleView('dpp')">DPP</div>
+            </div>
+
+            <section id="output">
+                <p class="empty">No analysis yet. Upload/paste syllabus content and run analysis.</p>
+            </section>
+        </main>
+        </div>
+
+        <div id="suite-student-os" hidden>
+            <main class="app">
+                <h1>Student Manager</h1>
+                <p class="sub">Timetables, adaptive tasks, discipline scoring, focus mode, and recovery planning — synced to your FastAPI backend with offline cache.</p>
+                <div id="os-root"></div>
+            </main>
+        </div>
+
+        <script>
+            (function resolveAppApiBase() {
+                if (window.APP_API_BASE) return;
+                if (window.location.protocol === "file:") {
+                    window.APP_API_BASE = "http://127.0.0.1:8000";
+                    return;
+                }
+                const host = window.location.hostname;
+                const port = window.location.port;
+                const isLoopback = host === "localhost" || host === "127.0.0.1";
+                const likelyApiOrigin =
+                    port === "8000" ||
+                    port === "8080" ||
+                    port === "9000" ||
+                    port === "5173" ||
+                    port === "4173";
+                if (isLoopback && port && !likelyApiOrigin) {
+                    window.APP_API_BASE = "http://127.0.0.1:8000";
+                    return;
+                }
+                window.APP_API_BASE = window.location.origin;
+            })();
+            let rawResult = null;
+
+            const API_BASE = window.APP_API_BASE || "http://127.0.0.1:8000";
+            const ANALYZE_URL = API_BASE + "/analyze";
+            const SAVE_URL = API_BASE + "/save";
+
+            function setStatus(text, type = "idle") {
+                const status = document.getElementById("status");
+                status.textContent = text;
+                status.classList.remove("success", "error");
+                if (type === "success") status.classList.add("success");
+                if (type === "error") status.classList.add("error");
+            }
+
+            function escapeHtml(value) {
+                return String(value ?? "")
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#39;");
+            }
+
+            function getInputPayload() {
+                const syllabusFile = document.getElementById("syllabus_in").files[0];
+                const bookFile = document.getElementById("book_in").files[0];
+                const syllabusText = document.getElementById("syllabus_text").value.trim();
+
+                if (!syllabusFile && !syllabusText) {
+                    alert("Please upload a syllabus PDF or paste syllabus text.");
+                    return null;
+                }
+
+                const formData = new FormData();
+                if (syllabusFile) formData.append("syllabus", syllabusFile);
+                if (bookFile) formData.append("book", bookFile);
+                if (syllabusText) formData.append("syllabus_text", syllabusText);
+                return formData;
+            }
+
+            async function runAnalysis(refresh = false) {
+                const out = document.getElementById("output");
+                const formData = getInputPayload();
+                if (!formData) return;
+
+                setStatus(refresh ? "Status: refreshing DPP..." : "Status: processing input...");
+                out.innerHTML = "<div class='loader'></div><p class='loading-text'>Working on your content...</p>";
+
+                const url = refresh ? `${ANALYZE_URL}?refresh=true` : ANALYZE_URL;
+
+                try {
+                    const response = await fetch(url, { method: "POST", body: formData });
+                    const result = await response.json();
+
+                    if (!response.ok || result.status === "error") {
+                        throw new Error(result.message || "Backend returned an error response.");
+                    }
+
+                    const payload = typeof result.data === "string" ? JSON.parse(result.data) : result.data;
+
+                    rawResult = {
+                        notes: payload?.notes ?? "",
+                        structuredNotes: Array.isArray(payload?.structuredNotes) ? payload.structuredNotes : [],
+                        topics: Array.isArray(payload?.topics) ? payload.topics : [],
+                        topicRelationships: Array.isArray(payload?.topicRelationships) ? payload.topicRelationships : [],
+                        exclusiveInsights: typeof payload?.exclusiveInsights === "object" && payload?.exclusiveInsights !== null
+                            ? payload.exclusiveInsights
+                            : {},
+                        ambushMode: typeof payload?.ambushMode === "object" && payload?.ambushMode !== null
+                            ? payload.ambushMode
+                            : {},
+                        dpp: Array.isArray(payload?.dpp) ? payload.dpp : (Array.isArray(payload?.hasPart) ? payload.hasPart : []),
+                        hasPart: Array.isArray(payload?.hasPart) ? payload.hasPart : []
+                    };
+
+                    const count = typeof result.questions_count === "number"
+                        ? result.questions_count
+                        : rawResult.dpp.length;
+
+                    setStatus(`Status: success. Generated ${count} DPP question(s).`, "success");
+                    toggleView(refresh ? "dpp" : "notes");
+                } catch (err) {
+                    showError(err.message || "Unexpected error while contacting backend.");
+                }
+            }
+
+            async function processData() {
+                await runAnalysis(false);
+            }
+
+            async function refreshData() {
+                await runAnalysis(true);
+            }
+
+            function setActiveTab(mode) {
+                const mapping = {
+                    notes: "btn-notes",
+                    dpp: "btn-dpp"
+                };
+                document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active-tab"));
+                const tabId = mapping[mode];
+                if (tabId) {
+                    const tab = document.getElementById(tabId);
+                    if (tab) tab.classList.add("active-tab");
+                }
+            }
+
+            function renderNotesStudio() {
+                const out = document.getElementById("output");
+                const rawNotes = rawResult.notes || "";
+                const sections = Array.isArray(rawResult.structuredNotes) ? rawResult.structuredNotes : [];
+                const topics = Array.isArray(rawResult.topics) ? rawResult.topics : [];
+
+                // Improved "Markdown-ish" converter for ChatGPT feel
+                function formatText(text) {
+                    if (!text) return "";
+                    let formatted = escapeHtml(text);
+                    
+                    // Headers with better styling
+                    formatted = formatted.replace(/^#### (.*?)$/gm, '<h4>$1</h4>');
+                    formatted = formatted.replace(/^### (.*?)$/gm, '<h3>$1</h3>');
+                    formatted = formatted.replace(/^## (.*?)$/gm, '<h2 style="font-size: 1.4rem; margin: 25px 0 15px; color: #64f4ac;">$1</h2>');
+                    formatted = formatted.replace(/^# (.*?)$/gm, '<h1 style="font-size: 1.8rem; margin: 30px 0 20px; color: #64f4ac; border-bottom: 2px solid rgba(100,244,172,0.3); padding-bottom: 10px;">$1</h1>');
+                    
+                    // Code blocks
+                    formatted = formatted.replace(/^```(.*?)\n([\s\S]*?)\n```$/gm, '<pre style="background: rgba(0,0,0,0.5); padding: 16px; border-radius: 8px; font-family: monospace; overflow-x: auto; border: 1px solid rgba(93,169,255,0.3); color: #5da9ff; line-height: 1.4;">$2</pre>');
+                    
+                    // Blockquotes
+                    formatted = formatted.replace(/^&gt; (.*?)$/gm, '<blockquote>$1</blockquote>');
+                    
+                    // Bold
+                    formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                    formatted = formatted.replace(/__(\S.*?\S)__/g, '<strong>$1</strong>');
+                    
+                    // Italic
+                    formatted = formatted.replace(/\*(.*?)\*/g, '<em style="color: #b6f7d4;">$1</em>');
+                    
+                    // Horizontal rules
+                    formatted = formatted.replace(/^---+$/gm, '<hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 20px 0;">');
+                    
+                    // Lists - handle multiple consecutive list items
+                    const lines = formatted.split('<br>');
+                    let inList = false;
+                    let inOL = false;
+                    let processed = [];
+                    
+                    for (let line of lines) {
+                        if (line.match(/^\s*\*\s+/) || line.match(/^\s*-\s+/)) {
+                            if (!inList) {
+                                processed.push('<ul style="margin: 12px 0; padding-left: 24px; line-height: 1.8;">');
+                                inList = true;
+                            }
+                            processed.push('<li>' + line.replace(/^\s*[\*-]\s+/, '') + '</li>');
+                        } else if (line.match(/^\s*\d+\.\s+/)) {
+                            if (inList) {
+                                processed.push('</ul>');
+                                inList = false;
+                            }
+                            if (!inOL) {
+                                processed.push('<ol style="margin: 12px 0; padding-left: 24px; line-height: 1.8; list-style: decimal;">');
+                                inOL = true;
+                            }
+                            processed.push('<li>' + line.replace(/^\s*\d+\.\s+/, '') + '</li>');
+                        } else {
+                            if (inList) {
+                                processed.push('</ul>');
+                                inList = false;
+                            }
+                            if (inOL) {
+                                processed.push('</ol>');
+                                inOL = false;
+                            }
+                            processed.push(line);
+                        }
+                    }
+                    
+                    if (inList) processed.push('</ul>');
+                    if (inOL) processed.push('</ol>');
+                    
+                    formatted = processed.join('<br>');
+                    
+                    return formatted;
+                }
+
+                let html = "<div class='chat-response-style'>";
+                
+                if (rawNotes) {
+                    html += `<div class='notes-header'>📚 Comprehensive Analysis Summary</div>`;
+                    html += `<div style='margin-bottom: 30px; padding: 16px; border-left: 4px solid rgba(100,244,172,0.4); background: rgba(100,244,172,0.06); border-radius: 6px;'>${formatText(rawNotes)}</div>`;
+                }
+
+                if (topics.length) {
+                    html += "<div style='margin: 30px 0 20px 0;'><h3 style='margin: 0 0 16px 0;'>🎯 Key Topics Identified</h3>";
+                    html += "<div class='topic-chip-wrap' style='display: flex; flex-wrap: wrap; gap: 10px;'>";
+                    topics.slice(0, 25).forEach(topic => {
+                        const weight = topic?.weight === "High" ? "🔴" : "🟡";
+                        html += `<span class='topic-chip' style='display: inline-flex; align-items: center; gap: 6px; color: var(--accent); font-weight: 600;'>${weight} ${escapeHtml(topic?.name || "Topic")}</span>`;
+                    });
+                    html += "</div></div>";
+                }
+
+                if (sections.length) {
+                    html += `<div style='margin-top: 30px;'><h3 style='margin: 0 0 20px 0;'>📖 Detailed Learning Modules</h3>`;
+                    sections.forEach((section, idx) => {
+                        const content = section?.content || section?.summary || "No analysis available.";
+                        html += "<div class='note-linear-section' style='margin-bottom: 30px; padding: 16px; border: 1px solid rgba(93,169,255,0.2); border-radius: 10px; background: rgba(93,169,255,0.04);'>";
+                        html += `<div class='note-content-body'>${formatText(content)}</div>`;
+                        html += "</div>";
+                    });
+                    html += "</div>";
+                } else {
+                    html += "<p class='empty'>No structured note sections returned.</p>";
+                }
+
+                html += "</div>";
+                out.innerHTML = html;
+            }
+
+            function renderDpp() {
+                const out = document.getElementById("output");
+                const questions = Array.isArray(rawResult.dpp)
+                    ? rawResult.dpp
+                    : (Array.isArray(rawResult.hasPart) ? rawResult.hasPart : []);
+
+                if (!questions.length) {
+                    out.innerHTML = "<p class='empty'>📝 No DPP questions returned. Try running analysis again.</p>";
+                    return;
+                }
+
+                let html = "<div class='chat-response-style'>";
+                html += `<div class='notes-header'>💪 Daily Practice Problems (DPP)</div>`;
+                html += `<p style='margin-bottom: 20px; color: #a5b0d8;'>Challenge yourself with ${questions.length} carefully curated questions designed to catch exam traps:</p>`;
+                html += "<div class='dpp-container'>";
+
+                questions.forEach((q, i) => {
+                    const question = escapeHtml(q?.text || "Untitled question");
+                    const options = Array.isArray(q?.options) ? q.options : [];
+                    const correct = escapeHtml(q?.correctAnswer || "");
+
+                    html += "<div class='dpp-question-card'>";
+                    html += `<div class='dpp-question-number'>Question ${i + 1} of ${questions.length}</div>`;
+                    html += `<div class='dpp-question-text'>❓ ${question}</div>`;
+                    
+                    if (options.length) {
+                        html += "<div class='dpp-options'>";
+                        options.forEach((opt, idx) => {
+                            const labels = ['A', 'B', 'C', 'D'];
+                            html += `<div class='dpp-option'><strong>${labels[idx] || ''}</strong> ${escapeHtml(opt)}</div>`;
+                        });
+                        html += "</div>";
+                    } else {
+                        html += "<div class='dpp-options'><div class='dpp-option'>No options available.</div></div>";
+                    }
+                    
+                    html += "<div class='dpp-answer-box'>";
+                    html += `<div class='dpp-answer-label'>✅ Correct Answer</div>`;
+                    html += `<div class='dpp-answer-text'>${correct || "No answer provided"}</div>`;
+                    html += "</div>";
+                    html += "</div>";
+                });
+
+                html += "</div>";
+                html += "</div>";
+                out.innerHTML = html;
+            }
+
+            // Verification modal helpers
+            function startVerify(taskId) {
+                // Prefer the authenticated helper; fall back to direct fetch if unavailable
+                if (window.__AI_OS && typeof window.__AI_OS.requestVerify === 'function') {
+                    return window.__AI_OS.requestVerify(taskId);
+                }
+
+                const token = localStorage.getItem('student_manager_token_v1');
+                const headers = token ? { 'Authorization': 'Bearer ' + token } : {};
+                fetch(API_BASE + `/api/os/tasks/${taskId}/verify`, { method: 'GET', headers })
+                    .then(async r => {
+                        if (!r.ok) {
+                            let errText = r.statusText;
+                            try { const j = await r.json(); errText = j.detail || j.message || JSON.stringify(j); } catch (_) {}
+                            throw new Error(errText);
+                        }
+                        return r.json();
+                    })
+                    .then(ch => {
+                        renderVerifyModal(taskId, ch.question, ch.options || []);
+                    })
+                    .catch(e => alert('Failed to get verification challenge: ' + (e.message || e)));
+            }
+
+            function renderVerifyModal(taskId, question, options) {
+                // remove existing
+                const existing = document.getElementById('verify-modal');
+                if (existing) existing.remove();
+                const modal = document.createElement('div');
+                modal.id = 'verify-modal';
+                modal.style = 'position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:9999;';
+                const card = document.createElement('div');
+                card.style = 'width:min(720px,95%);background:var(--panel);padding:18px;border-radius:12px;border:1px solid var(--panel-border);';
+                card.innerHTML = `<h3 style="margin-top:0;color:#64f4ac;">🔒 Verify Task Completion</h3><p style="color:var(--muted)">${escapeHtml(question)}</p>`;
+                const list = document.createElement('div');
+                list.style = 'display:flex;flex-direction:column;gap:8px;margin-top:12px;';
+                options = Array.isArray(options) ? options : [];
+                if (options.length) {
+                    options.forEach((opt, i) => {
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.className = 'dpp-option';
+                        btn.textContent = `${String.fromCharCode(65 + i)}. ${opt}`;
+                        btn.onclick = (e) => {
+                            e.preventDefault();
+                            submitVerifyAnswer(taskId, i);
+                        };
+                        list.appendChild(btn);
+                    });
+                } else {
+                    const note = document.createElement('div');
+                    note.className = 'dpp-option';
+                    note.textContent = 'No options provided for this challenge.';
+                    list.appendChild(note);
+                }
+                const cancel = document.createElement('button');
+                cancel.className = 'os-btn ghost';
+                cancel.style = 'margin-top:12px;';
+                cancel.textContent = 'Cancel';
+                cancel.onclick = () => modal.remove();
+                card.appendChild(list);
+                card.appendChild(cancel);
+                modal.appendChild(card);
+                document.body.appendChild(modal);
+            }
+
+            function submitVerifyAnswer(taskId, answerIdx) {
+                const token = localStorage.getItem('student_manager_token_v1');
+                const headers = { 'Content-Type': 'application/json' };
+                if (token) headers['Authorization'] = 'Bearer ' + token;
+                fetch(API_BASE + `/api/os/tasks/${taskId}/verify`, {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify({ answer: answerIdx })
+                }).then(async r => {
+                    const j = await (r.text().then(t => { try { return JSON.parse(t); } catch { return { message: t }; } }));
+                    if (!r.ok) throw new Error(j.detail || j.message || r.statusText || JSON.stringify(j));
+                    return j;
+                })
+                    .then(res => {
+                        alert(res.message || JSON.stringify(res));
+                        // remove modal
+                        const m = document.getElementById('verify-modal');
+                        if (m) m.remove();
+                        // refresh tasks view while preserving current view
+                        if (window.__AI_OS && typeof window.__AI_OS.setView === 'function') {
+                            const currentView = localStorage.getItem("active_os_view") || "tasks";
+                            window.__AI_OS.setView(currentView);
+                        } else if (window.__AI_OS && typeof window.__AI_OS.renderOsPublic === 'function') {
+                            window.__AI_OS.renderOsPublic();
+                        } else if (typeof renderOs === 'function') {
+                            renderOs();
+                        }
+                    })
+                    .catch(e => alert('Verification failed: ' + (e.message || e)));
+            }
+
+
+            function toggleView(mode) {
+                const out = document.getElementById("output");
+                setActiveTab(mode);
+
+                if (!rawResult) {
+                    out.innerHTML = "<p class='empty'>No analysis data available.</p>";
+                    return;
+                }
+
+                if (mode === "notes") {
+                    renderNotesStudio();
+                    return;
+                }
+                renderDpp();
+            }
+
+            function buildExportText() {
+                if (!rawResult) return "";
+
+                let content = "NOTES\n\n";
+                content += (rawResult.notes || "") + "\n\n";
+
+                if (Array.isArray(rawResult.structuredNotes) && rawResult.structuredNotes.length) {
+                    content += "NOTES STUDIO\n\n";
+                    rawResult.structuredNotes.forEach((section, idx) => {
+                        content += `${idx + 1}. ${section?.title || "Untitled"}\n`;
+                        content += `Summary: ${section?.summary || ""}\n`;
+                        (section?.keyPoints || []).forEach(point => { content += ` - Key: ${point}\n`; });
+                        (section?.pitfalls || []).forEach(point => { content += ` - Pitfall: ${point}\n`; });
+                        (section?.quickRevision || []).forEach(point => { content += ` - Quick Revision: ${point}\n`; });
+                        content += "----------------------------------------\n";
+                    });
+                    content += "\n";
+                }
+
+                if (Array.isArray(rawResult.topics) && rawResult.topics.length) {
+                    content += "TOPICS\n\n";
+                    rawResult.topics.forEach(topic => {
+                        content += `- ${topic?.name || ""} (weight: ${topic?.weight || ""})\n`;
+                        content += `  ${topic?.description || ""}\n`;
+                    });
+                    content += "\n";
+                }
+
+                if (Array.isArray(rawResult.topicRelationships) && rawResult.topicRelationships.length) {
+                    content += "TOPIC RELATIONSHIPS\n\n";
+                    rawResult.topicRelationships.forEach(rel => {
+                        content += `- ${rel?.from || ""} -> ${rel?.to || ""} [${rel?.type || ""}]\n`;
+                    });
+                    content += "\n";
+                }
+
+                const ex = rawResult.exclusiveInsights || {};
+                const ambush = rawResult.ambushMode || {};
+                content += "PROJECT EXCLUSIVE INSIGHTS\n\n";
+                content += `Syllabus Fingerprint: ${ex?.syllabusFingerprint || ""}\n`;
+                content += "Prerequisite Chain:\n";
+                (ex?.prerequisiteChain || []).forEach(item => { content += ` - ${item}\n`; });
+                content += "Revision Priority:\n";
+                (ex?.revisionPriority || []).forEach(item => {
+                    content += ` - ${item?.topic || ""}: ${item?.priority || ""} (${item?.reason || ""})\n`;
+                });
+                content += "\n";
+
+                if (ambush && Object.keys(ambush).length) {
+                    content += "AMBUSH MODE\n\n";
+                    content += `${ambush?.headline || ""}\n\n`;
+                    (ambush?.blindSpots || []).forEach(item => {
+                        content += `- ${item?.topic || ""} [${item?.riskLevel || ""}]\n`;
+                        content += `  Why risky: ${item?.whyRisky || ""}\n`;
+                        content += `  Trigger: ${item?.triggerSignal || ""}\n`;
+                        content += `  Rescue: ${item?.rescueMove || ""}\n`;
+                    });
+                    (ambush?.crossLinks || []).forEach(item => {
+                        content += `- Bridge: ${item?.from || ""} -> ${item?.to || ""}\n`;
+                        content += `  Why it matters: ${item?.whyItMatters || ""}\n`;
+                        content += `  Question: ${item?.bridgeQuestion || ""}\n`;
+                    });
+                    content += "\n";
+                }
+
+                content += "DPP\n\n";
+                ((rawResult.dpp || rawResult.hasPart) || []).forEach((q, i) => {
+                    content += `Q${i + 1}: ${q?.text || ""}\n`;
+                    (q?.options || []).forEach(opt => {
+                        content += ` - ${opt}\n`;
+                    });
+                    content += `Answer: ${q?.correctAnswer || ""}\n`;
+                    content += "----------------------------------------\n";
+                });
+                return content;
+            }
+
+            function buildExportMarkdown() {
+                if (!rawResult) return "";
+                let md = "";
+                if (rawResult.notes) md += rawResult.notes + "\n\n";
+                if (Array.isArray(rawResult.structuredNotes) && rawResult.structuredNotes.length) {
+                    rawResult.structuredNotes.forEach(section => {
+                        if (section?.title) md += `## ${section.title}\n\n`;
+                        if (section?.content) md += section.content + "\n\n";
+                    });
+                }
+                if (Array.isArray(rawResult.dpp) && rawResult.dpp.length) {
+                    md += "## DPP\n\n";
+                    rawResult.dpp.forEach((q, i) => {
+                        md += `${i+1}. ${q?.text || ''}\n`;
+                        if (Array.isArray(q?.options)) {
+                            q.options.forEach((opt, idx) => {
+                                md += `   - ${String.fromCharCode(65 + idx)}. ${opt}\n`;
+                            });
+                        }
+                        md += `   - Answer: ${q?.correctAnswer || ''}\n\n`;
+                    });
+                }
+                return md;
+            }
+
+            function exportMarkdown() {
+                const md = buildExportMarkdown();
+                if (!md) { alert('No analysis data to export.'); return; }
+                const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `analysis_${Date.now()}.md`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+            }
+            async function saveToCloud() {
+                if (!rawResult) {
+                    alert("Nothing to save.");
+                    return;
+                }
+
+                try {
+                    const response = await fetch(SAVE_URL, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(rawResult)
+                    });
+                    const result = await response.json();
+                    if (response.ok && result?.status === "success") {
+                        const urlMsg = result?.url ? `\nURL: ${result.url}` : "";
+                        alert(`Saved via backend as ${result.file || "analysis file"}${urlMsg}`);
+                        return;
+                    }
+                } catch (err) {
+                    console.warn("Backend save failed:", err);
+                }
+
+                const content = buildExportText();
+                const fileName = `analysis_${Date.now()}.txt`;
+
+                try {
+                    if (window.puter && puter.fs && typeof puter.fs.write === "function") {
+                        await puter.fs.write(fileName, content);
+                        alert(`Saved to Puter cloud as ${fileName}`);
+                        return;
+                    }
+                } catch (err) {
+                    console.warn("Puter save failed:", err);
+                }
+
+                const blob = new Blob([content], { type: "text/plain" });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }
+
+            function showError(msg) {
+                setStatus("Status: failed.", "error");
+                const safeMessage = escapeHtml(msg || "Unknown error");
+                document.getElementById("output").innerHTML =
+                    `<div style="color: var(--danger); font-weight: 600;">Error: ${safeMessage}</div>`;
+            }
+
+            (function initThreeBackground() {
+                if (typeof THREE === "undefined") return;
+
+                const canvas = document.getElementById("bg3d");
+                if (!canvas) return;
+
+                try {
+                    const scene = new THREE.Scene();
+                    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                    camera.position.z = 5;
+
+                    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+                    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+
+                    const geometry = new THREE.BufferGeometry();
+                    const particleCount = 1200;
+                    const positions = new Float32Array(particleCount * 3);
+                    for (let i = 0; i < positions.length; i++) {
+                        positions[i] = (Math.random() - 0.5) * 18;
+                    }
+                    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+
+                    const material = new THREE.PointsMaterial({
+                        size: 0.03,
+                        color: 0x7dd8ff,
+                        transparent: true,
+                        opacity: 0.9
+                    });
+
+                    const particles = new THREE.Points(geometry, material);
+                    scene.add(particles);
+
+                    const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+                    function animate() {
+                        if (!reduceMotion) {
+                            particles.rotation.y += 0.0007;
+                            particles.rotation.x += 0.00025;
+                        }
+                        renderer.render(scene, camera);
+                        requestAnimationFrame(animate);
+                    }
+                    animate();
+
+                    window.addEventListener("resize", () => {
+                        renderer.setSize(window.innerWidth, window.innerHeight);
+                        camera.aspect = window.innerWidth / window.innerHeight;
+                        camera.updateProjectionMatrix();
+                    });
+                } catch (err) {
+                    console.warn("Three.js initialization failed:", err);
+                    canvas.style.display = "none";
+                }
+            })();
+        </script>
+        <script>
+    /**
+    * Student Manager — client module with API sync + localStorage fallback.
+    * Expects DOM: #suite-student-os, #os-root, suite switcher ids in frontend.html
+    */
+    (function () {
+        const API_ROOT = (window.APP_API_BASE || "http://127.0.0.1:8000") + "/api/os";
+        const LS_USER = "student_manager_user_v1";
+        const LS_TOKEN = "student_manager_token_v1";
+        const LS_CACHE = "student_manager_cache_v1";
+
+        function loadCache() {
+            try {
+                return JSON.parse(localStorage.getItem(LS_CACHE) || "{}");
+            } catch {
+                return {};
+            }
+        }
+
+        function saveCache(data) {
+            try {
+                localStorage.setItem(LS_CACHE, JSON.stringify(data));
+            } catch {
+                /* ignore quota */
+            }
+        }
+
+        function getToken() {
+            return localStorage.getItem(LS_TOKEN) || "";
+        }
+
+        function setSession(token, user) {
+            if (token) localStorage.setItem(LS_TOKEN, token);
+            else localStorage.removeItem(LS_TOKEN);
+            if (user) localStorage.setItem(LS_USER, JSON.stringify(user));
+            else localStorage.removeItem(LS_USER);
+        }
+
+        function getUser() {
+            try {
+                return JSON.parse(localStorage.getItem(LS_USER) || "null");
+            } catch {
+                return null;
+            }
+        }
+
+        /** FastAPI may return detail as a string (HTTPException) or a list (422 validation). */
+        function formatApiDetail(detail) {
+            if (detail == null || detail === "") return "";
+            if (typeof detail === "string") return detail;
+            if (Array.isArray(detail)) {
+                return detail
+                    .map((d) => (d && (d.msg || d.message)) || "")
+                    .filter(Boolean)
+                    .join(" ");
+            }
+            if (typeof detail === "object" && detail.msg) return String(detail.msg);
+            try {
+                return JSON.stringify(detail);
+            } catch {
+                return String(detail);
+            }
+        }
+
+        async function apiFetch(path, options = {}) {
+            const headers = options.headers ? { ...options.headers } : {};
+            if (!(options.body instanceof FormData)) {
+                headers["Content-Type"] = headers["Content-Type"] || "application/json";
+            }
+            const token = getToken();
+            if (token) headers["Authorization"] = "Bearer " + token;
+            const res = await fetch(API_ROOT + path, { ...options, headers });
+            const text = await res.text();
+            let json = {};
+            try {
+                json = text ? JSON.parse(text) : {};
+            } catch {
+                json = { status: "error", message: text };
+            }
+            if (!res.ok) {
+                const msg = formatApiDetail(json.detail) || json.message || res.statusText;
+                const err = new Error(msg);
+                err.payload = json;
+                err.status = res.status;
+                throw err;
+            }
+            return json;
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+        }
+
+        let osView = localStorage.getItem("active_os_view") || "dashboard";
+        let timetableEditMode = false;
+        let timetableDraft = null;
+        let timetableDayIndex = 0;
+        let pomodoroTimer = null;
+        let pomodoroLeft = 25 * 60;
+        let lastActivity = Date.now();
+
+        const TASK_FOCUS_SECONDS = 30 * 60;
+        const taskTimerHandles = {};
+
+        function showOsFatal(error) {
+            console.error("Student Manager render failed:", error);
+            const root = document.getElementById("os-root");
+            if (!root) return;
+            if (root.dataset.mounted !== "1") {
+                root.dataset.mounted = "1";
+                root.innerHTML = `
+                    <div class="os-toolbar">
+                        <div class="os-auth" id="os-auth"></div>
+                        <div class="os-quick" id="os-quick"></div>
+                    </div>
+                    <section class="os-panel" id="os-panel"></section>
+                `;
+            }
+            const panel = document.getElementById("os-panel");
+            if (!panel) return;
+            panel.innerHTML = `
+                <p class="empty">Student Manager hit a client-side error while loading.</p>
+                <p class="helper">${escapeHtml((error && error.message) || "Unknown error")}</p>
+                <p class="helper">Open the browser console for the full stack trace.</p>
+            `;
+        }
+
+        function safeRenderOs() {
+            return Promise.resolve(renderOs()).catch(showOsFatal);
+        }
+
+        function formatMmSs(totalSec) {
+            const sec = Math.max(0, Math.floor(totalSec));
+            const m = Math.floor(sec / 60);
+            const s = sec % 60;
+            return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+        }
+
+        function clearTaskTimerInterval(taskId) {
+            const h = taskTimerHandles[taskId];
+            if (h) clearInterval(h);
+            delete taskTimerHandles[taskId];
+        }
+
+        function notifyTaskFocusDone(title) {
+            const body = "30 minutes are up for: " + title;
+            if (typeof Notification !== "undefined" && Notification.permission === "granted") {
+                try {
+                    new Notification("Task timer finished", { body });
+                } catch (_) {
+                    alert(body);
+                }
+                return;
+            }
+            if (typeof Notification !== "undefined" && Notification.permission === "default") {
+                Notification.requestPermission().then((p) => {
+                    if (p === "granted") {
+                        try {
+                            new Notification("Task timer finished", { body });
+                        } catch (_) {
+                            alert(body);
+                        }
+                    } else {
+                        alert(body);
+                    }
+                });
+                return;
+            }
+            alert(body);
+        }
+
+        function taskProblemText(t) {
+            const ps = (t.problem_statement || "").trim();
+            if (ps) return ps;
+            return "Break the task into concrete steps: clarify the goal, outline a minimal plan, execute one slice, then verify with a quick self-check.";
+        }
+
+        function buildTasksPanelHtml(tasksPayload) {
+            const list = tasksPayload && Array.isArray(tasksPayload.tasks) ? tasksPayload.tasks : [];
+            if (!list.length) {
+                return `<p class="empty">No tasks for this day yet. Use <strong>Generate today’s tasks</strong>.</p>`;
+            }
+            return list
+                .map(
+                    (t) => `
+                <div class="os-task" data-task-id="${t.id}">
+                    <div class="os-task-body">
+                        <div class="os-task-title">${escapeHtml(t.title)}</div>
+                        <div class="helper">${escapeHtml(t.task_type)} · diff ${t.difficulty} · ${escapeHtml(t.status)}</div>
+                        <div class="os-task-problem">
+                            <div class="os-task-problem-label">Problem statement</div>
+                            <p class="os-task-problem-text">${escapeHtml(taskProblemText(t))}</p>
+                        </div>
+                        ${(t.notes || "").trim() ? `<div class="helper" style="margin-top:8px;"><strong>Coach tip:</strong> ${escapeHtml(String(t.notes).trim())}</div>` : ""}
+                    </div>
+                    <div class="os-task-actions">
+                        <button type="button" class="os-btn small" onclick="window.__AI_OS.requestVerify(${t.id})">Done</button>
+                        <button type="button" class="os-btn small ghost" onclick="window.__AI_OS.patchTask(${t.id}, 'skipped')">Skip</button>
+                    </div>
+                </div>`
+                )
+                .join("");
+        }
+
+        function startTaskTimer(taskId) {
+            clearTaskTimerInterval(taskId);
+            const row = document.querySelector('.os-task[data-task-id="' + String(taskId) + '"]');
+            const title = (row && row.querySelector(".os-task-title") && row.querySelector(".os-task-title").textContent.trim()) || "Task";
+            let left = TASK_FOCUS_SECONDS;
+            const tick = () => {
+                const el = document.getElementById("os-task-timer-" + taskId);
+                if (el) el.textContent = formatMmSs(left);
+                if (left <= 0) {
+                    clearTaskTimerInterval(taskId);
+                    notifyTaskFocusDone(title);
+                    return;
+                }
+                left -= 1;
+            };
+            taskTimerHandles[taskId] = setInterval(tick, 1000);
+            tick();
+        }
+
+        function stopTaskTimer(taskId) {
+            clearTaskTimerInterval(taskId);
+            const el = document.getElementById("os-task-timer-" + taskId);
+            if (el) el.textContent = "";
+        }
+
+        function normalizeTimeValue(t) {
+            const m = String(t || "09:00")
+                .trim()
+                .match(/^(\d{1,2}):(\d{2})$/);
+            if (!m) return "09:00";
+            const h = m[1].padStart(2, "0");
+            const min = m[2];
+            return h + ":" + min;
+        }
+
+
+        function buildTimetableReadonlyDaysHtml(days) {
+            return (days || [])
+                .map(
+                    (d) => `
+                <div class="os-day">
+                    <h4>${escapeHtml(d.name)} <span class="helper">${escapeHtml(d.date)}</span></h4>
+                    <ul class="os-slot-list">
+                        ${(d.timeline || [])
+                            .map(
+                                (s) => `
+                            <li><span class="os-pill ${escapeHtml(s.category)}">${escapeHtml(s.category)}</span>
+                            ${escapeHtml(s.start)}–${escapeHtml(s.end)} · ${escapeHtml(s.label)}</li>`
+                            )
+                            .join("")}
+                    </ul>
+                </div>`
+                )
+                .join("");
+        }
+
+        function buildSlotEditRow(di, si, s) {
+            const cat = String(s.category || "study").toLowerCase();
+            return `<div class="os-slot-edit-row" data-slot-row="${si}">
+                <div class="os-slot-edit-fields">
+                    <input type="time" step="60" class="os-input" name="start" value="${escapeHtml(normalizeTimeValue(s.start))}" title="Start time" />
+                    <input type="time" step="60" class="os-input" name="end" value="${escapeHtml(normalizeTimeValue(s.end))}" title="End time" />
+                    <input type="text" class="os-input" name="label" value="${escapeHtml(s.label || "")}" placeholder="Label" />
+                    <input type="text" class="os-input" name="category" value="${escapeHtml(cat)}" placeholder="Category (e.g. Study, Gym)" title="Category" />
+                </div>
+                <div class="os-slot-edit-actions">
+                    <button type="button" class="os-btn small ghost" onclick="window.__AI_OS.removeTimetableSlot(${di},${si})">Remove slot</button>
+                </div>
+            </div>`;
+        }
+
+        function buildTimetableEditorDaysHtml(days, startIndex) {
+            return (days || [])
+                .map(
+                    (d, i) => {
+                        const di = startIndex + i;
+                        return `
+                <div class="os-day os-day-edit">
+                    <h4>${escapeHtml(d.name)} <span class="helper">${escapeHtml(d.date)}</span></h4>
+                    <div class="os-slot-edit-list" data-day-editor="${di}">
+                        ${(d.timeline || []).map((s, si) => buildSlotEditRow(di, si, s)).join("")}
+                    </div>
+                    <button type="button" class="os-btn small secondary" onclick="window.__AI_OS.addTimetableSlot(${di})">+ Add slot</button>
+                </div>`;
+                    }
+                )
+                .join("");
+        }
+
+        function buildTimetableTabInner(tt, editMode) {
+            const metaNotes = tt?.meta && tt.meta.notes != null ? String(tt.meta.notes) : "";
+            const days = tt?.days || [];
+            // Day names map
+            const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+            const dayShortNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+            // Day selector
+            let daySelector = `<div class="tabs day-selector" style="margin-bottom:15px; flex-wrap:wrap; gap:5px;">`;
+            dayShortNames.forEach((short, i) => {
+                const active = i === timetableDayIndex ? "active-tab" : "";
+                daySelector += `<div class="tab day-tab ${active}" onclick="window.__AI_OS.setTimetableDay(${i})">${short}</div>`;
+            });
+            daySelector += `</div>`;
+
+            // Find the day object that matches the selected name
+            const targetDayName = dayNames[timetableDayIndex];
+            let dayObj = days.find(d => (d.name || "").toLowerCase() === targetDayName.toLowerCase());
+            let dayIndexInArray = days.findIndex(d => (d.name || "").toLowerCase() === targetDayName.toLowerCase());
+            
+            // If day doesn't exist, create a placeholder (ensures all 7 days are editable)
+            if (!dayObj) {
+                dayObj = { name: targetDayName, date: "", timeline: [] };
+                if (editMode && timetableDraft) {
+                    timetableDraft.days.push(dayObj);
+                    const order = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+                    timetableDraft.days.sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name));
+                    dayIndexInArray = timetableDraft.days.findIndex(d => d.name === targetDayName);
+                }
+            }
+            
+            const selectedDay = [dayObj];
+            const dayHtml = editMode
+                ? buildTimetableEditorDaysHtml(selectedDay, dayIndexInArray) 
+                : buildTimetableReadonlyDaysHtml(selectedDay);
+
+            const btnRow = editMode
+                ? `<div class="btn-row" style="grid-template-columns: repeat(2, 1fr);">
+                    <button type="button" class="save-btn" onclick="window.__AI_OS.saveTimetableEdits()">Save changes</button>
+                    <button type="button" class="refresh-btn" onclick="window.__AI_OS.cancelTimetableEdit()">Cancel</button>
+                </div>
+                <p class="helper" style="margin-top:10px;">Select a day at the top to edit its slots, then <strong>Save changes</strong>.</p>
+                <label class="os-label" style="display:block;margin-top:12px;">Week notes</label>
+                <textarea id="os-timetable-meta-notes" class="os-input tall os-timetable-meta" style="min-height:88px;" placeholder="Notes shown under the timetable…">${escapeHtml(metaNotes)}</textarea>`
+                : `<div class="btn-row" style="grid-template-columns: repeat(2, 1fr);">
+                    <button type="button" class="os-btn secondary" onclick="window.__AI_OS.enterTimetableEdit()">Edit timetable</button>
+                    <button type="button" class="os-btn ghost" onclick="window.__AI_OS.regenerateTimetable()">Reset week</button>
+                </div>`;
+            const metaFooter =
+                editMode || !metaNotes.trim()
+                    ? ""
+                    : `<p class="helper" style="margin-top:12px;">${escapeHtml(metaNotes)}</p>`;
+            return daySelector + btnRow + `<div class="os-days" id="os-timetable-days">${dayHtml}</div>` + metaFooter;
+        }
+
+        function collectTimetableDraftFromDom() {
+            const root = document.getElementById("os-timetable-days");
+            if (!root || !timetableDraft) return null;
+            const next = JSON.parse(JSON.stringify(timetableDraft));
+            const ta = document.getElementById("os-timetable-meta-notes");
+            if (!next.meta) next.meta = {};
+            if (ta) next.meta.notes = ta.value;
+            root.querySelectorAll(".os-slot-edit-list").forEach((wrap) => {
+                const di = parseInt(wrap.getAttribute("data-day-editor"), 10);
+                if (Number.isNaN(di) || !next.days[di]) return;
+                const slots = [];
+                wrap.querySelectorAll(".os-slot-edit-row").forEach((row) => {
+                    const start = row.querySelector('[name="start"]')?.value || "09:00";
+                    const end = row.querySelector('[name="end"]')?.value || "10:00";
+                    const label = row.querySelector('[name="label"]')?.value || "";
+                    const category = row.querySelector('[name="category"]')?.value || "study";
+                    slots.push({ start, end, label, category });
+                });
+                next.days[di].timeline = slots;
+            });
+            return next;
+        }
+
+        function repaintTimetableEditor() {
+            const panel = document.getElementById("os-panel");
+            if (!panel || osView !== "timetable" || !timetableEditMode || !timetableDraft) return;
+            panel.innerHTML = buildTimetableTabInner(timetableDraft, true);
+        }
+
+        function enterTimetableEdit() {
+            const c = loadCache();
+            const tt = c.timetable;
+            if (!tt || !(tt.days || []).length) {
+                alert("Load the timetable first (open this tab or tap Regenerate week).");
+                return;
+            }
+            timetableEditMode = true;
+            timetableDraft = JSON.parse(JSON.stringify(tt));
+            repaintTimetableEditor();
+        }
+
+        async function cancelTimetableEdit() {
+            timetableEditMode = false;
+            timetableDraft = null;
+            await renderOs();
+        }
+
+        async function saveTimetableEdits() {
+            const payload = collectTimetableDraftFromDom();
+            if (!payload) return;
+            try {
+                await apiFetch("/timetable", { method: "PUT", body: JSON.stringify(payload) });
+                timetableEditMode = false;
+                timetableDraft = null;
+                await renderOs();
+                alert("Timetable saved.");
+            } catch (e) {
+                alert(e.message || "Save failed");
+            }
+        }
+
+        function addTimetableSlot(dayIndex) {
+            if (!timetableDraft || !timetableDraft.days[dayIndex]) return;
+            if (!Array.isArray(timetableDraft.days[dayIndex].timeline)) timetableDraft.days[dayIndex].timeline = [];
+            timetableDraft.days[dayIndex].timeline.push({
+                start: "09:00",
+                end: "10:00",
+                label: "",
+                category: "",
+            });
+            repaintTimetableEditor();
+        }
+
+        function removeTimetableSlot(dayIndex, slotIndex) {
+            if (!timetableDraft || !timetableDraft.days[dayIndex] || !timetableDraft.days[dayIndex].timeline) return;
+            timetableDraft.days[dayIndex].timeline.splice(slotIndex, 1);
+            repaintTimetableEditor();
+        }
+
+        document.addEventListener("mousemove", () => {
+            lastActivity = Date.now();
+        });
+        document.addEventListener("keydown", () => {
+            lastActivity = Date.now();
+        });
+
+        function setOsView(view) {
+            const allowedViews = new Set(["dashboard", "timetable", "tasks", "progress", "focus"]);
+            if (!allowedViews.has(view)) {
+                view = "dashboard";
+            }
+            if (view !== "timetable") {
+                timetableEditMode = false;
+                timetableDraft = null;
+            }
+            osView = view;
+            localStorage.setItem("active_os_view", view);
+            document.querySelectorAll(".os-tab").forEach((el) => {
+                el.classList.toggle("active-tab", el.dataset.os === view);
+            });
+            safeRenderOs();
+        }
+
+        function mountOsShell() {
+            const root = document.getElementById("os-root");
+            if (!root) return;
+            if (root.dataset.mounted === "1") {
+                safeRenderOs();
+                return;
+            }
+            root.dataset.mounted = "1";
+            root.innerHTML = `
+                <div class="os-toolbar">
+                    <div class="os-auth" id="os-auth"></div>
+                    <div class="os-quick" id="os-quick"></div>
+                </div>
+                <div class="tabs os-tabs">
+                    <div class="tab os-tab" data-os="dashboard" onclick="window.__AI_OS.setView('dashboard')">Dashboard</div>
+                    <div class="tab os-tab" data-os="timetable" onclick="window.__AI_OS.setView('timetable')">Timetable</div>
+                    <div class="tab os-tab" data-os="tasks" onclick="window.__AI_OS.setView('tasks')">Tasks</div>
+                    <div class="tab os-tab" data-os="focus" onclick="window.__AI_OS.setView('focus')">Focus</div>
+                </div>
+                <section class="os-panel" id="os-panel"></section>
+            `;
+            bindAuth();
+            setOsView(osView);
+        }
+
+        function bindAuth() {
+            const box = document.getElementById("os-auth");
+            if (!box) return;
+            const user = getUser();
+            if (user && getToken()) {
+                box.innerHTML = `
+                    <span class="os-chip">Signed in as <strong>${escapeHtml(user.display_name || user.username)}</strong></span>
+                    <button type="button" class="os-btn ghost" onclick="window.__AI_OS.logout()">Log out</button>
+                `;
+            } else {
+                box.innerHTML = `
+                    <div class="os-auth-fields">
+                        <input class="os-input" id="os_login_user" placeholder="Username (min 3 chars, e.g. alex2026)" autocomplete="username" />
+                        <input class="os-input" id="os_login_pass" type="password" placeholder="Password (min 4 chars)" autocomplete="current-password" />
+                        <input class="os-input os-input-wide" id="os_login_display" placeholder="Nickname (optional — leave empty)" autocomplete="nickname" />
+                        <p class="helper os-auth-hint">Use <strong>Username</strong> + <strong>Password</strong> to log in. <strong>Nickname</strong> is only the friendly label (“Signed in as…”). Leave it blank and your username is used.</p>
+                        <div class="os-auth-actions">
+                            <button type="button" class="os-btn" onclick="window.__AI_OS.login()">Log in</button>
+                            <button type="button" class="os-btn secondary" onclick="window.__AI_OS.signup()">Sign up</button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        async function login() {
+            const u = document.getElementById("os_login_user")?.value?.trim();
+            const p = document.getElementById("os_login_pass")?.value || "";
+            if (!u || !p) return alert("Enter username and password.");
+            if (u.length < 3) return alert("Username must be at least 3 characters.");
+            if (p.length < 4) return alert("Password must be at least 4 characters.");
+            try {
+                const res = await apiFetch("/auth/login", { method: "POST", body: JSON.stringify({ username: u, password: p }) });
+                setSession(res.token, res.user);
+                bindAuth();
+                await renderOs();
+            } catch (e) {
+                alert(e.message || "Login failed");
+            }
+        }
+
+        async function signup() {
+            const u = document.getElementById("os_login_user")?.value?.trim();
+            const p = document.getElementById("os_login_pass")?.value || "";
+            if (!u || !p) return alert("Enter username and password.");
+            if (u.length < 3) return alert("Username must be at least 3 characters.");
+            if (p.length < 4) return alert("Password must be at least 4 characters.");
+            const disp = document.getElementById("os_login_display")?.value?.trim() || "";
+            const displayName = disp || u;
+            try {
+                const res = await apiFetch("/auth/signup", {
+                    method: "POST",
+                    body: JSON.stringify({ username: u, password: p, display_name: displayName }),
+                });
+                setSession(res.token, res.user);
+                bindAuth();
+                await renderOs();
+            } catch (e) {
+                alert(e.message || "Signup failed");
+            }
+        }
+
+        function logout() {
+            setSession("", null);
+            bindAuth();
+            renderOs();
+        }
+
+        async function renderOs() {
+            const panel = document.getElementById("os-panel");
+            const quick = document.getElementById("os-quick");
+            if (!panel) return;
+            const token = getToken();
+
+            if (!token) {
+                panel.innerHTML = `
+                    <p class="empty">Create an account or log in to sync your discipline data across devices.</p>
+                    <p class="helper">Offline tip: after first login, cached analytics stay in localStorage if the API is unreachable.</p>
+                `;
+                if (quick) quick.innerHTML = "";
+                return;
+            }
+
+            if (quick) {
+                if (token) {
+                    quick.innerHTML = `
+                        <span class="helper" id="os-offline-hint"></span>
+                    `;
+                }
+            }
+
+            let offline = false;
+            const cache = loadCache();
+
+            try {
+                if (osView === "dashboard") {
+                    const [disc, burn, rec] = await Promise.all([
+                        apiFetch("/discipline/today"),
+                        apiFetch("/burnout/status"),
+                        apiFetch("/recovery/evaluate", { method: "POST" }),
+                    ]);
+                    cache.dashboard = { disc, burn, rec };
+                    saveCache(cache);
+                    panel.innerHTML = `
+                        <h3 class="section-title">Discipline overview</h3>
+                        <div class="os-grid">
+                            <div class="os-card">
+                                <div class="os-metric">${disc.score}</div>
+                                <div class="os-label">Discipline score</div>
+                                <p class="helper">${escapeHtml(disc.percentile_hint)}</p>
+                                <p class="helper">Streak: ${disc.streak} day(s)</p>
+                            </div>
+                            <div class="os-card">
+                                <div class="os-metric">${burn.skipped_recent ?? 0}</div>
+                                <div class="os-label">Skipped tasks (48h)</div>
+                                <p class="helper">${escapeHtml(burn.recommendation || "")}</p>
+                            </div>
+                            <div class="os-card wide">
+                                <div class="os-label">Recovery planner</div>
+                                <p>${escapeHtml(rec.recovery?.headline || "")}</p>
+                                <ul class="mini-list">
+                                    ${(rec.recovery?.actions || []).map((a) => `<li>${escapeHtml(a)}</li>`).join("")}
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                } else if (osView === "timetable") {
+                    if (!timetableEditMode) {
+                        const data = await apiFetch("/timetable");
+                        cache.timetable = data.timetable;
+                        saveCache(cache);
+                    }
+                    const tt = timetableEditMode ? timetableDraft : cache.timetable;
+                    panel.innerHTML = buildTimetableTabInner(tt, timetableEditMode);
+                } else if (osView === "tasks") {
+                    const tasks = await apiFetch("/tasks");
+                    cache.tasks = tasks;
+                    saveCache(cache);
+                    panel.innerHTML = `
+                        <div class="btn-row" style="grid-template-columns: 1fr;">
+                            <button type="button" class="run-btn" onclick="window.__AI_OS.genDaily()">Generate today’s tasks</button>
+                        </div>
+                        <div id="os-task-list">${buildTasksPanelHtml(tasks)}</div>
+                    `;
+                } else if (osView === "focus") {
+                    panel.innerHTML = `
+                        <h3 class="section-title">Focus mode</h3>
+                        <div class="os-grid">
+                            <div class="os-card">
+                                <div class="os-metric" id="os-pomo-display">25:00</div>
+                                <div class="os-label">Pomodoro timer</div>
+                                <div class="btn-row" style="margin-top:12px;">
+                                    <button type="button" class="os-btn small" onclick="window.__AI_OS.startPomo(25)">Start 25m</button>
+                                    <button type="button" class="os-btn small secondary" onclick="window.__AI_OS.startPomo(50)">Start 50m</button>
+                                    <button type="button" class="os-btn small ghost" onclick="window.__AI_OS.stopPomo()">Stop</button>
+                                </div>
+                            </div>
+                            <div class="os-card">
+                                <div class="os-label">Quick actions</div>
+                                <button type="button" class="os-btn wide" onclick="window.__AI_OS.logFocus()" style="width:100%; margin-bottom:8px;">Log focus session</button>
+                                <button type="button" class="os-btn danger wide" onclick="window.__AI_OS.startStrictFocus(25)" style="width:100%; margin-bottom:8px;">Start strict focus 25m</button>
+                                <button type="button" class="os-btn ghost wide" onclick="window.__AI_OS.openProfileEditor()" style="width:100%;">Edit focus profile</button>
+                                <div id="os-strict-focus-banner" class="strict-focus-banner" style="display:none;">
+                                    <div>Strict focus mode is active. Stay in this browser tab, keep fullscreen active, and avoid minimizing or switching windows. Leaving the view ends the session.</div>
+                                    <div style="margin-top:10px; font-weight:700;">Remaining: <span id="os-strict-focus-banner-timer">25:00</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                const hint = document.getElementById("os-offline-hint");
+                if (hint && token) hint.textContent = "";
+            } catch (err) {
+                offline = true;
+                const hint = document.getElementById("os-offline-hint");
+                if (hint) hint.textContent = "Showing cached data — API unreachable.";
+                renderCachedView(panel, osView, cache);
+            }
+
+            const idleMin = Math.floor((Date.now() - lastActivity) / 60000);
+            try {
+                const nudge = await apiFetch("/nudge/heartbeat", {
+                    method: "POST",
+                    body: JSON.stringify({ idle_minutes: idleMin }),
+                });
+                if (nudge.trigger && osView === "dashboard") {
+                    panel.insertAdjacentHTML(
+                        "beforeend",
+                        `<div class="os-banner">${escapeHtml(nudge.message)}<br/><small>${escapeHtml(nudge.micro_task || "")}</small></div>`
+                    );
+                }
+            } catch {
+                /* ignore */
+            }
+        }
+
+        function renderCachedView(panel, view, cache) {
+            if (view === "dashboard" && cache.dashboard) {
+                const { disc, burn, rec } = cache.dashboard;
+                panel.innerHTML = `
+                    <p class="helper">Offline snapshot</p>
+                    <div class="os-grid">
+                        <div class="os-card"><div class="os-metric">${disc.score}</div><div class="os-label">Discipline</div></div>
+                        <div class="os-card"><div class="os-metric">${burn.skipped_recent ?? 0}</div><div class="os-label">Skipped</div></div>
+                        <div class="os-card wide"><pre class="er-fallback">${escapeHtml(JSON.stringify(rec.recovery, null, 2))}</pre></div>
+                    </div>`;
+            } else if (view === "timetable" && cache.timetable) {
+                panel.innerHTML = `<p class="helper">Offline snapshot</p>${buildTimetableTabInner(cache.timetable, false)}`;
+            } else if (view === "tasks" && cache.tasks) {
+                panel.innerHTML = `
+                    <p class="helper">Offline snapshot</p>
+                    <div id="os-task-list">${buildTasksPanelHtml(cache.tasks)}</div>`;
+            } else {
+                panel.innerHTML = `<p class="empty">No cached data for this tab yet.</p>`;
+            }
+        }
+
+        function drawShadow(series) {
+            const canvas = document.getElementById("os-shadow");
+            if (!canvas || !series.length) return;
+            const ctx = canvas.getContext("2d");
+            const w = canvas.width;
+            const h = canvas.height;
+            ctx.clearRect(0, 0, w, h);
+            ctx.strokeStyle = "#64f4ac";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            const maxX = series.length - 1;
+            const pts = Array.isArray(series) ? series : [];
+            pts.forEach((pt, idx) => {
+                const x = (idx / maxX) * (w - 20) + 10;
+                const y = h - (pt.score / 100) * (h - 20) - 10;
+                if (idx === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+            ctx.fillStyle = "#5da9ff";
+            ctx.font = "12px Segoe UI";
+            ctx.fillText("Projected discipline trend", 10, 16);
+        }
+
+        async function regenerateTimetable() {
+            timetableEditMode = false;
+            timetableDraft = null;
+            try {
+                await apiFetch("/timetable/generate", { method: "POST" });
+                await renderOs();
+            } catch (e) {
+                alert(e.message);
+            }
+        }
+
+        async function genDaily() {
+            try {
+                await apiFetch("/tasks/generate-daily", { method: "POST" });
+                await renderOs();
+            } catch (e) {
+                alert(e.message);
+            }
+        }
+
+        async function patchTask(id, status) {
+            stopTaskTimer(id);
+            try {
+                const res = await apiFetch("/tasks/" + id, { method: "PATCH", body: JSON.stringify({ status }) });
+                
+                if (res.dpp && res.dpp.questions) {
+                    const dpp = res.dpp;
+                    let msg = (dpp.message || "Task completed!") + "\n\n";
+                    const questions = Array.isArray(dpp.questions) ? dpp.questions : [];
+                    questions.forEach((q, i) => {
+                        msg += `Q${i + 1}: ${q.q || "No question text"}\nAns: ${q.a || "No answer"}\n\n`;
+                    });
+                    alert(msg);
+                } else if (res.message) {
+                    // Handle "Task removed" or other general success messages
+                    console.log("Task update:", res.message);
+                }
+                
+                // Preserve the current view (tasks, dashboard, etc) instead of jumping to dashboard
+                setOsView(osView);
+            } catch (e) {
+                console.error("Task update failed:", e);
+                alert(e.message || "An unknown error occurred during the update.");
+            }
+        }
+
+        async function logFocus() {
+            const minutes = parseInt(prompt("Minutes focused?", "25"), 10) || 25;
+            try {
+                await apiFetch("/focus/session", { method: "POST", body: JSON.stringify({ minutes }) });
+                alert("Focus session logged.");
+            } catch (e) {
+                alert(e.message);
+            }
+        }
+
+        let strictFocusActive = false;
+        let strictFocusLosses = 0;
+        let strictFocusDetectInterval = null;
+        let strictFocusReady = false;
+        let strictFocusFullscreenRequested = false;
+
+        function startStrictFocus(min) {
+            if (strictFocusActive) {
+                alert("Strict focus is already active.");
+                return;
+            }
+            if (!confirm("Start strict focus mode? This mode will end if you switch tabs, minimize the browser, or leave fullscreen.")) {
+                return;
+            }
+            strictFocusActive = true;
+            strictFocusReady = false;
+            strictFocusFullscreenRequested = false;
+            strictFocusLosses = 0;
+            document.getElementById("os-strict-focus-banner").style.display = "block";
+            createStrictFocusOverlay();
+            lockStrictFocusApp();
+            bindStrictFocusEvents();
+            focusStrictWindow();
+            setTimeout(() => {
+                strictFocusReady = true;
+            }, 1000);
+            startPomo(min);
+        }
+
+        function stopStrictFocus(reason) {
+            if (!strictFocusActive) return;
+            strictFocusActive = false;
+            strictFocusReady = false;
+            strictFocusFullscreenRequested = false;
+            document.getElementById("os-strict-focus-banner").style.display = "none";
+            removeStrictFocusOverlay();
+            unbindStrictFocusEvents();
+            unlockStrictFocusApp();
+            stopPomo();
+            if (document.fullscreenElement && document.exitFullscreen) {
+                document.exitFullscreen().catch(() => {
+                    // ignore
+                });
+            }
+            if (reason) {
+                alert("Strict focus ended: " + reason);
+            }
+        }
+
+        function createStrictFocusOverlay() {
+            if (document.getElementById("strict-focus-overlay")) return;
+            const overlay = document.createElement("div");
+            overlay.id = "strict-focus-overlay";
+            overlay.className = "strict-focus-overlay";
+            overlay.innerHTML = `
+                <div class="overlay-card">
+                    <h2>STRICT FOCUS MODE</h2>
+                    <p>This session is locked in. Do not switch browser tabs, minimize the window, or leave the fullscreen view.</p>
+                    <p>Remaining time:</p>
+                    <div id="os-strict-focus-timer" class="strict-focus-countdown">${formatMmSs(pomodoroLeft)}</div>
+                    <p>If the browser loses focus, the strict session will end automatically.</p>
+                    <button type="button" onclick="window.__AI_OS.stopStrictFocus('User exited strict focus mode.')">Stop strict focus</button>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+        }
+
+        function removeStrictFocusOverlay() {
+            const overlay = document.getElementById("strict-focus-overlay");
+            if (overlay) overlay.remove();
+        }
+
+        function bindStrictFocusEvents() {
+            window.addEventListener("blur", strictFocusVisibilityHandler);
+            window.addEventListener("focus", strictFocusWindowFocusHandler);
+            document.addEventListener("keydown", strictFocusKeyHandler, true);
+            document.addEventListener("visibilitychange", strictFocusVisibilityHandler);
+            document.addEventListener("fullscreenchange", strictFocusFullscreenHandler);
+            window.addEventListener("beforeunload", strictFocusBeforeUnloadHandler);
+            strictFocusDetectInterval = setInterval(() => {
+                if (!strictFocusActive || !strictFocusReady) return;
+                if (document.hidden || !document.hasFocus()) {
+                    focusStrictWindow();
+                    strictFocusBreak("Window lost focus or tab switched.");
+                }
+            }, 400);
+        }
+
+        function unbindStrictFocusEvents() {
+            window.removeEventListener("blur", strictFocusVisibilityHandler);
+            window.removeEventListener("focus", strictFocusWindowFocusHandler);
+            document.removeEventListener("keydown", strictFocusKeyHandler, true);
+            document.removeEventListener("visibilitychange", strictFocusVisibilityHandler);
+            document.removeEventListener("fullscreenchange", strictFocusFullscreenHandler);
+            window.removeEventListener("beforeunload", strictFocusBeforeUnloadHandler);
+            if (strictFocusDetectInterval) {
+                clearInterval(strictFocusDetectInterval);
+                strictFocusDetectInterval = null;
+            }
+        }
+
+        function strictFocusVisibilityHandler() {
+            if (!strictFocusActive || !strictFocusReady) return;
+            if (document.hidden || !document.hasFocus()) {
+                strictFocusBreak("Window lost focus or tab switched.");
+            }
+        }
+
+        function strictFocusWindowFocusHandler() {
+            if (!strictFocusActive) return;
+            focusStrictWindow();
+        }
+
+        function strictFocusKeyHandler(e) {
+            if (!strictFocusActive) return;
+            const blocked = e.key === "F11" || e.key === "Escape" || e.key === "Tab" || e.key === "PageUp" || e.key === "PageDown";
+            const ctrlBlocked = e.ctrlKey && ["Tab", "w", "W", "PageUp", "PageDown"].includes(e.key);
+            if (blocked || ctrlBlocked || (e.altKey && e.key === "Tab")) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+        }
+
+        function focusStrictWindow() {
+            if (!strictFocusActive) return;
+            try {
+                if (!document.hasFocus() && typeof window.focus === "function") {
+                    window.focus();
+                }
+            } catch (_) {}
+            if (document.fullscreenEnabled && document.documentElement.requestFullscreen) {
+                if (document.fullscreenElement !== document.documentElement) {
+                    strictFocusFullscreenRequested = true;
+                    document.documentElement.requestFullscreen().catch(() => {
+                        strictFocusFullscreenRequested = false;
+                    });
+                }
+            }
+        }
+
+        function lockStrictFocusApp() {
+            document.querySelectorAll(".os-tab").forEach((el) => el.classList.add("disabled"));
+        }
+
+        function unlockStrictFocusApp() {
+            document.querySelectorAll(".os-tab").forEach((el) => el.classList.remove("disabled"));
+        }
+
+        function strictFocusFullscreenHandler() {
+            if (!strictFocusActive || !strictFocusReady) return;
+            if (!strictFocusFullscreenRequested) return;
+            if (document.fullscreenElement !== document.documentElement) {
+                strictFocusBreak("Fullscreen exited.");
+            }
+        }
+
+        function strictFocusBeforeUnloadHandler(e) {
+            if (!strictFocusActive) return;
+            const message = "Strict focus session is active. Leaving will end the session.";
+            e.preventDefault();
+            e.returnValue = message;
+            return message;
+        }
+
+        function strictFocusBreak(reason) {
+            strictFocusLosses += 1;
+            const label = reason || "focus mode boundary broken.";
+            stopStrictFocus(label);
+        }
+
+        function startPomo(min) {
+            stopPomo();
+            pomodoroLeft = min * 60;
+            tickPomo();
+            pomodoroTimer = setInterval(tickPomo, 1000);
+        }
+
+        function tickPomo() {
+            const el = document.getElementById("os-pomo-display");
+            if (!el) return;
+            const m = String(Math.floor(pomodoroLeft / 60)).padStart(2, "0");
+            const s = String(pomodoroLeft % 60).padStart(2, "0");
+            const time = `${m}:${s}`;
+            el.textContent = time;
+            const strictEl = document.getElementById("os-strict-focus-timer");
+            if (strictEl) {
+                strictEl.textContent = time;
+            }
+            const bannerEl = document.getElementById("os-strict-focus-banner-timer");
+            if (bannerEl) {
+                bannerEl.textContent = time;
+            }
+            pomodoroLeft -= 1;
+            if (pomodoroLeft < 0) stopPomo();
+        }
+
+        function stopPomo() {
+            if (pomodoroTimer) clearInterval(pomodoroTimer);
+            pomodoroTimer = null;
+        }
+
+        function openProfileEditor() {
+            const user = getUser();
+            const profile = user?.profile || {};
+            const next = prompt("Energy profile: morning | night | balanced", profile.energy || "morning");
+            if (!next) return;
+            profile.energy = next;
+            const exam = confirm("Enable exam mode?");
+            profile.exam_mode = exam;
+            apiFetch("/profile", { method: "PUT", body: JSON.stringify(profile) })
+                .then((res) => {
+                    const merged = res.profile || profile;
+                    setSession(getToken(), { ...user, profile: merged });
+                    alert("Profile updated.");
+                })
+                .catch((e) => alert(e.message));
+        }
+
+        window.__AI_OS = {
+            setView: setOsView,
+            login,
+            signup,
+            logout,
+            renderOsPublic: renderOs,
+            regenerateTimetable,
+            enterTimetableEdit,
+            cancelTimetableEdit,
+            saveTimetableEdits,
+            addTimetableSlot,
+            removeTimetableSlot,
+            genDaily,
+            patchTask,
+            startTaskTimer,
+            stopTaskTimer,
+            logFocus,
+            startStrictFocus,
+            stopStrictFocus,
+            startPomo,
+            stopPomo,
+            openProfileEditor,
+            setTimetableDay: (idx) => {
+                timetableDayIndex = idx;
+                renderOs();
+            },
+            toggleDayInTimetable: (name) => {
+                if (!timetableDraft) return;
+                const idx = timetableDraft.days.findIndex(d => d.name === name);
+                if (idx > -1) {
+                    timetableDraft.days.splice(idx, 1);
+                } else {
+                    timetableDraft.days.push({ name, date: "", timeline: [] });
+                    // Sort by Mon-Sun order
+                    const order = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+                    timetableDraft.days.sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name));
+                }
+                repaintTimetableEditor();
+            },
+            refreshQuick: renderOs,
+            requestVerify: async (taskId) => {
+                try {
+                    const res = await apiFetch('/tasks/' + taskId + '/verify', { method: 'GET' });
+                    // Use the shared modal renderer
+                    renderVerifyModal(taskId, res.question, res.options || []);
+                } catch (e) {
+                    alert(e.message || 'Failed to request verification');
+                }
+            },
+        };
+
+        function initSuiteSwitcher() {
+            const btnSyllabus = document.getElementById("suite-btn-syllabus");
+            const btnOs = document.getElementById("suite-btn-os");
+            const syllabus = document.getElementById("suite-syllabus");
+            const os = document.getElementById("suite-student-os");
+            function showSyllabus() {
+                localStorage.setItem("active_suite", "syllabus");
+                syllabus?.removeAttribute("hidden");
+                os?.setAttribute("hidden", "");
+                btnSyllabus?.classList.add("active-suite");
+                btnOs?.classList.remove("active-suite");
+            }
+
+            function showOs() {
+                localStorage.setItem("active_suite", "os");
+                os?.removeAttribute("hidden");
+                syllabus?.setAttribute("hidden", "");
+                btnOs?.classList.add("active-suite");
+                btnSyllabus?.classList.remove("active-suite");
+                try {
+                    mountOsShell();
+                } catch (error) {
+                    showOsFatal(error);
+                }
+            }
+
+            btnSyllabus?.addEventListener("click", showSyllabus);
+            btnOs?.addEventListener("click", showOs);
+
+            // Restore active suite tab from localStorage on load
+            const activeSuite = localStorage.getItem("active_suite") || "syllabus";
+            if (activeSuite === "os") {
+                showOs();
+            } else {
+                showSyllabus();
+            }
+        }
+
+        if (document.readyState === "loading") {
+            window.addEventListener("DOMContentLoaded", initSuiteSwitcher);
+        } else {
+            initSuiteSwitcher();
+        }
+    })();
+
+        </script>
+    </body>
+    </html>

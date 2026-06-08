@@ -1,0 +1,171 @@
+📘 NOTES:
+
+**Course Syllabus**
+
+**Unit 1: Software Engineering**
+
+### CO1: Software Requirements, Design and Testing
+
+* **Software Requirements**
+ + Definition of software requirements
+ + Types of software requirements (functional, non-functional)
+ + Requirement elicitation techniques
+ + Requirement analysis and specification
+* **Software Design**
+ + Software design principles and patterns
+ + Object-Oriented Design (OOD)
+ + Design for Maintainability and Reusability
+* **Software Testing**
+ + Software testing concepts
+ + Types of testing (unit testing, integration testing, system testing)
+ + Test planning and test case development
+
+### CO2: Software Development Methodologies and Software Engineering Tools
+
+* **Software Development Methodologies**
+ + Agile Methodology
+ + Waterfall Methodology
+ + V-Model
+* **Software Engineering Tools**
+ + Version control systems (Git, SVN)
+ + Agile project management tools (Jira, Trello)
+ + Testing and debugging tools (JUnit, PyUnit)
+
+### CO3: Software Quality Assurance and Testing
+
+* **Software Quality Assurance**
+ + Software quality metrics and attributes
+ + Software quality assurance processes
+ + Defect management
+* **Software Testing**
+ + Black box testing
+ + White box testing
+ + Grey box testing
+
+### CO4: Cloud Computing and Cyber Security
+
+* **Cloud Computing**
+ + Cloud service models (IaaS, PaaS, SaaS)
+ + Cloud deployment models (public, private, hybrid)
+ + Cloud security and compliance
+
+### CO5: Data Science and Artificial Intelligence
+
+* **Data Science**
+ + Data preprocessing and visualization
+ + Machine learning algorithms (supervised, unsupervised)
+ + Model evaluation and selection
+* **Artificial Intelligence**
+ + Introduction to AI and ML
+ + AI applications in software development
+ + AI tools and frameworks (TensorFlow, PyTorch)
+
+### CO6: Blockchain and Distributed Ledger Technology
+
+* **Blockchain Fundamentals**
+ + Blockchain architecture and components
+ + Blockchain consensus algorithms
+ + Smart contracts and scripting languages
+* **Distributed Ledger Technology**
+ + Overview of distributed ledger technology
+ + Use cases and applications of DLT
+
+### CO7: Cyber Security and Information Assurance
+
+* **Cyber Security Fundamentals**
+ + Introduction to cyber security
+ + Types of cyber attacks (malware, phishing, SQL injection)
+ + Cyber security measures and countermeasures
+* **Information Assurance**
+ + Information security principles and policies
+ + Data protection and privacy
+ + Risk management and mitigation
+
+**Electives**
+
+* **Python Programming**
+ + Introduction to Python programming
+ + Python data structures and file I/O
+ + Object-Oriented Programming in Python
+* **Web Development with ReactJS and Redux**
+ + Introduction to ReactJS and Redux
+ + Building web applications with ReactJS and Redux
+ + State management and optimization
+* **Cloud Computing with AWS and Azure**
+ + Overview of cloud computing
+ + AWS and Azure services and features
+ + Cloud migration and deployment strategies
+* **Data Science with Python and R**
+ + Introduction to data science
+ + Data preprocessing and visualization
+ + Machine learning and statistical modeling
+* **Blockchain Development with Ethereum**
+ + Introduction to Ethereum and Solidity
+ + Building blockchain applications with Ethereum
+ + Smart contract development and deployment
+
+📝 MCQs:
+
+Q1: What is the main focus of software architecture?
+ - Designing the system's user interface
+ - Defining the system's components and their interactions
+ - Optimizing the system's performance
+ - Ensuring the system's security
+✔ Answer: Defining the system's components and their interactions
+----------------------------------------
+Q2: Which programming paradigm is known for its object-oriented approach?
+ - Functional programming
+ - Object-oriented programming
+ - Imperative programming
+ - Declarative programming
+✔ Answer: Object-oriented programming
+----------------------------------------
+Q3: What is the main advantage of cloud computing?
+ - Lower upfront costs
+ - Improved scalability
+ - Enhanced security
+ - Increased performance
+✔ Answer: Improved scalability
+----------------------------------------
+Q4: Which type of testing is concerned with verifying that a system meets its requirements?
+ - Unit testing
+ - Integration testing
+ - System testing
+ - Regression testing
+✔ Answer: System testing
+----------------------------------------
+Q5: What is the purpose of containerization in cloud computing?
+ - To provide virtualization
+ - To improve scalability
+ - To enhance security
+ - To simplify deployment and management
+✔ Answer: To simplify deployment and management
+----------------------------------------
+Q6: Which machine learning algorithm is a type of feedforward neural network?
+ - Decision tree
+ - Random forest
+ - Support vector machine
+ - Perceptron
+✔ Answer: Perceptron
+----------------------------------------
+Q7: What is the main advantage of using a container orchestration tool?
+ - Improved scalability
+ - Enhanced security
+ - Simplified deployment and management
+ - Increased performance
+✔ Answer: Simplified deployment and management
+----------------------------------------
+Q8: Which software development methodology emphasizes continuous improvement and delivery?
+ - Waterfall
+ - Iterative
+ - Agile
+ - Hybrid
+✔ Answer: Agile
+----------------------------------------
+Q9: What is the main goal of software quality assurance?
+ - To ensure the system's performance
+ - To guarantee the system's security
+ - To meet the system's requirements
+ - To ensure customer satisfaction
+✔ Answer: To ensure customer satisfaction
+----------------------------------------
